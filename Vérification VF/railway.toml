@@ -1,0 +1,11 @@
+[build]
+builder = "NIXPACKS"
+
+[phases.setup]
+nixPkgs = ["nodejs", "npm"]
+
+[phases.install]
+cmds = ["cd server && npm install"]
+
+[start]
+cmd = "cd server && npm start"
