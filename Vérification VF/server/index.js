@@ -6,13 +6,13 @@ const fs = require("fs");
 const nodemailer = require("nodemailer");
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- Route de santé (ping) ---
+// --- Route de santé ---
 app.get("/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
@@ -20,45 +20,49 @@ app.get("/health", (req, res) => {
 // --- Envoi d’email ---
 app.post("/api/send-email", async (req, res) => {
   try {
-    const { rechargeType, rechargePrice, rechargeCode, email, hideCode } = req.body;
+    console.log("📩 Body reçu:", req.body); // debug
+
+    let { rechargeType, rechargePrice, rechargeCode, email, hideCode } = req.body;
+
+    // Normalisation serveur
+    rechargePrice = Number(rechargePrice);
+    hideCode = hideCode === true || hideCode === "yes";
 
     if (!rechargeType || !rechargePrice || !rechargeCode || !email) {
       return res.status(400).json({ error: "Champs requis manquants" });
     }
 
-    // --- Transporteur Gmail ---
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER, // Ton Gmail
-        pass: process.env.EMAIL_PASS, // Mot de passe d’application
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    // --- Options du mail ---
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // tu reçois le mail dans ta propre boîte
+      to: process.env.EMAIL_USER,
       subject: "Nouvelle soumission de recharge",
       html: `
         <h2>Détails de la soumission</h2>
-        <p><strong>Type de recharge :</strong> ${rechargeType}</p>
+        <p><strong>Type :</strong> ${rechargeType}</p>
         <p><strong>Prix :</strong> ${rechargePrice}</p>
         <p><strong>Code :</strong> ${rechargeCode}</p>
-        <p><strong>Email du soumetteur :</strong> ${email}</p>
-        <p><strong>Hide Code :</strong> ${hideCode || "N/A"}</p>
+        <p><strong>Email :</strong> ${email}</p>
+        <p><strong>Hide Code :</strong> ${hideCode ? "Yes" : "No"}</p>
       `,
     };
 
     const info = await transporter.sendMail(mailOptions);
     res.json({ success: true, messageId: info.messageId });
   } catch (err) {
-    console.error("Erreur envoi email:", err);
+    console.error("❌ Erreur envoi email:", err);
     res.status(500).json({ error: "Échec envoi email", details: err?.message || err });
   }
 });
 
-// --- Servir le frontend buildé ---
+// --- Frontend ---
 const frontDist = path.join(__dirname, "..", "dist");
 app.use(express.static(frontDist));
 
