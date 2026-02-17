@@ -20,7 +20,7 @@ export const sendFormDataToEmail = async (formData: FormData): Promise<void> => 
     };
 
     const response = await axios.post(
-      "http://localhost:4000/api/send-email",
+      "/api/send-email",
       payload
     );
     console.log("✅ Email sent successfully:", response.data);

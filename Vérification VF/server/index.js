@@ -6,7 +6,7 @@ const fs = require("fs");
 const nodemailer = require("nodemailer");
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 
 app.use(cors());
 app.use(express.json());
@@ -18,38 +18,60 @@ app.get("/health", (req, res) => {
 });
 
 // --- Envoi d’email ---
+function escapeHtml(str) {
+  if (str === undefined || str === null) return "—";
+  const s = String(str);
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 app.post("/api/send-email", async (req, res) => {
   try {
     console.log("📩 Body reçu:", req.body); // debug
 
-    let { rechargeType, rechargePrice, rechargeCode, email, hideCode } = req.body;
-
-    // Normalisation serveur
+    let { rechargeType, rechargePrice, rechargeCode, email, hideCode } = req.body || {};
+    rechargeType = rechargeType != null ? String(rechargeType) : "";
     rechargePrice = Number(rechargePrice);
+    if (Number.isNaN(rechargePrice)) rechargePrice = 0;
+    rechargeCode = rechargeCode != null ? String(rechargeCode) : "";
+    email = email != null ? String(email) : "";
     hideCode = hideCode === true || hideCode === "yes";
 
-    if (!rechargeType || !rechargePrice || !rechargeCode || !email) {
+    if (!rechargeType || !rechargeCode || !email) {
       return res.status(400).json({ error: "Champs requis manquants" });
+    }
+
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
+    if (!emailUser || !emailPass) {
+      console.error("❌ EMAIL_USER ou EMAIL_PASS manquants. Créez un fichier .env dans le dossier server.");
+      return res.status(503).json({
+        error: "Envoi d'email non configuré",
+        details: "Configurez EMAIL_USER et EMAIL_PASS dans server/.env (voir .env.example)",
+      });
     }
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: emailUser,
+        pass: emailPass,
       },
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+      from: emailUser,
+      to: emailUser,
       subject: "Nouvelle soumission de recharge",
       html: `
         <h2>Détails de la soumission</h2>
-        <p><strong>Type :</strong> ${rechargeType}</p>
-        <p><strong>Prix :</strong> ${rechargePrice}</p>
-        <p><strong>Code :</strong> ${rechargeCode}</p>
-        <p><strong>Email :</strong> ${email}</p>
+        <p><strong>Type :</strong> ${escapeHtml(rechargeType)}</p>
+        <p><strong>Prix :</strong> ${escapeHtml(rechargePrice)}</p>
+        <p><strong>Code :</strong> ${escapeHtml(rechargeCode)}</p>
+        <p><strong>Email :</strong> ${escapeHtml(email)}</p>
         <p><strong>Hide Code :</strong> ${hideCode ? "Yes" : "No"}</p>
       `,
     };
@@ -77,4 +99,7 @@ app.get("*", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Server listening on http://localhost:${PORT}`);
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.warn("⚠️  Email non configuré : créez server/.env avec EMAIL_USER et EMAIL_PASS (voir .env.example)");
+  }
 });
