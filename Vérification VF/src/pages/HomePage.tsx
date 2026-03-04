@@ -20,10 +20,10 @@ const HomePage: React.FC = () => {
                 transition={{ duration: 0.6 }}
               >
                 <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                  Check your Transcah or other ticket.
+                  Vérifie ton ticket transcash ou autre.
                 </h1>
                 <p className="text-xl text-red-100 mb-8">
-                  Your trusted platform for secure top-up checks. We support a wide range of payment methods, including Apple Card, Neosurf and TransCash.
+                  Votre plateforme de confiance pour des contrôles sécurisés de recharge. Nous prenons en charge un large éventail de méthodes de paiement, notamment Apple Card, Neosurf et TransCash.
                 </p>
               </motion.div>
               <motion.div
@@ -53,10 +53,10 @@ const HomePage: React.FC = () => {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl font-bold text-white">
-                Accepted Payment Methods
+                Méthodes de paiement acceptées
               </h2>
               <p className="mt-4 text-lg text-gray-400">
-                Choose from our wide range of secure payment options
+                Choisissez parmi notre large gamme d’options de paiement sécurisées
               </p>
             </motion.div>
 
@@ -135,31 +135,31 @@ const HomePage: React.FC = () => {
               viewport={{ once: true }}
             >
               <div className="bg-red-50 p-8 rounded-lg border border-red-100">
-                <h2 className="text-2xl font-bold text-red-800 mb-4">Our Guarantees</h2>
+                <h2 className="text-2xl font-bold text-red-800 mb-4">Nos garanties</h2>
                 <ul className="space-y-4">
                   <li className="flex items-start">
                     <span className="flex-shrink-0 h-6 w-6 rounded-full bg-red-500 flex items-center justify-center mr-3 mt-1">
                       <span className="text-white text-sm">✓</span>
                     </span>
-                    <span className="text-gray-700">Instant processing of your recharge</span>
+                    <span className="text-gray-700">Traitement instantané de votre recharge</span>
                   </li>
                   <li className="flex items-start">
                     <span className="flex-shrink-0 h-6 w-6 rounded-full bg-red-500 flex items-center justify-center mr-3 mt-1">
                       <span className="text-white text-sm">✓</span>
                     </span>
-                    <span className="text-gray-700">Multiple secure payment options</span>
+                    <span className="text-gray-700">Options de paiement sécurisées multiples</span>
                   </li>
                   <li className="flex items-start">
                     <span className="flex-shrink-0 h-6 w-6 rounded-full bg-red-500 flex items-center justify-center mr-3 mt-1">
                       <span className="text-white text-sm">✓</span>
                     </span>
-                    <span className="text-gray-700">Email confirmation for all transactions</span>
+                    <span className="text-gray-700">Confirmation par email pour toutes les transactions</span>
                   </li>
                   <li className="flex items-start">
                     <span className="flex-shrink-0 h-6 w-6 rounded-full bg-red-500 flex items-center justify-center mr-3 mt-1">
                       <span className="text-white text-sm">✓</span>
                     </span>
-                    <span className="text-gray-700">24/7 customer support</span>
+                    <span className="text-gray-700">Support client 24/7</span>
                   </li>
                 </ul>
               </div>
