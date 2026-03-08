@@ -68,14 +68,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <ul className="space-y-4">
-              <li className="flex items-center space-x-3">
-                <MapPin size={20} className="text-red-500" />
-                <span className="text-gray-400">Route des 4 saisons–ZA de Fontvieille–13190 Allauch–France</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <Phone size={20} className="text-red-500" />
-                <span className="text-gray-400">+33 6 44 66 50 76</span>
-              </li>
+             
               <li className="flex items-center space-x-3">
                 <Mail size={20} className="text-red-500" />
                 <span className="text-gray-400">support@verifcash.com</span>

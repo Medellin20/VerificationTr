@@ -17,14 +17,10 @@ const Header: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-red-200 transition-colors duration-200">
-                About
-              </a>
+             
             </li>
             <li>
-              <a href="#" className="hover:text-red-200 transition-colors duration-200">
-                Contact
-              </a>
+              
             </li>
           </ul>
         </nav>
