@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-2xl font-bold mb-4">Verifcash</h3>
             <p className="text-gray-400 mb-4">
-              Simplifying recharge management with secure, reliable service since 2024.
+              Simplification de la gestion des recharges grâce à un service sécurisé et fiable depuis 2023.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
