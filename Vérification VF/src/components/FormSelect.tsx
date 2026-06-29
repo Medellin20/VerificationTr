@@ -31,6 +31,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
       </label>
       <select
         id={id}
+        name={id}
         value={value}
         onChange={onChange}
         required={required}

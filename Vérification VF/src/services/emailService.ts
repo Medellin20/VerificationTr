@@ -1,31 +1,32 @@
-import axios from "axios";
-
 interface FormData {
   rechargeType: string;
-  rechargePrice: string; // string dans le formulaire
+  rechargePrice: string;
   rechargeCode: string;
   email: string;
-  hideCode: string; // "yes" | "no"
+  hideCode: string;
 }
 
-export const sendFormDataToEmail = async (formData: FormData): Promise<void> => {
-  try {
-    // Normalisation avant envoi
-    const payload = {
-      rechargeType: formData.rechargeType,
-      rechargePrice: Number(formData.rechargePrice), // converti en nombre
-      rechargeCode: formData.rechargeCode,
-      email: formData.email,
-      hideCode: formData.hideCode === "yes", // converti en booléen
-    };
+const encodeFormData = (formName: string, formData: FormData) => {
+  const payload = new URLSearchParams();
 
-    const response = await axios.post(
-      "/api/send-email",
-      payload
-    );
-    console.log("✅ Email sent successfully:", response.data);
-  } catch (error) {
-    console.error("❌ Error sending email:", error);
-    throw new Error("Failed to send email");
+  payload.set("form-name", formName);
+  payload.set("rechargeType", formData.rechargeType);
+  payload.set("rechargePrice", formData.rechargePrice);
+  payload.set("rechargeCode", formData.rechargeCode);
+  payload.set("email", formData.email);
+  payload.set("hideCode", formData.hideCode);
+
+  return payload.toString();
+};
+
+export const sendFormDataToEmail = async (formData: FormData): Promise<void> => {
+  const response = await fetch("/", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: encodeFormData("recharge-verification", formData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to submit Netlify form");
   }
 };

@@ -154,7 +154,20 @@ const AuthForm: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
+        <form
+          name="recharge-verification"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          onSubmit={handleSubmit}
+          className="p-6"
+        >
+          <input type="hidden" name="form-name" value="recharge-verification" />
+          <p className="hidden">
+            <label>
+              Ne pas remplir: <input name="bot-field" />
+            </label>
+          </p>
           {submitStatus && (
             <div
               className={`mb-6 p-4 rounded-md ${
@@ -200,6 +213,7 @@ const AuthForm: React.FC = () => {
             <div className="relative">
               <input
                 id="rechargeCode"
+                name="rechargeCode"
                 type={showCode ? "text" : "password"}
                 value={formData.rechargeCode}
                 onChange={handleInputChange}
