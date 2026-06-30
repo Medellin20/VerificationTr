@@ -19,6 +19,13 @@ interface FormErrors {
   email?: string;
 }
 
+interface RechargeCodeRule {
+  maxLength: number;
+  sanitize: (value: string) => string;
+  pattern: RegExp;
+  message: string;
+}
+
 const rechargeTypes = [
   { value: "Transcash", label: "Transcash" },
   { value: "PCS", label: "PCS" },
@@ -28,6 +35,57 @@ const rechargeTypes = [
   { value: "Steam", label: "Steam" },
   { value: "Paysafecard", label: "Paysafecard" },
 ];
+
+const keepDigits = (value: string) => value.replace(/\D/g, "");
+const keepAlphaNumeric = (value: string) =>
+  value.replace(/[^a-z0-9]/gi, "").toUpperCase();
+
+const rechargeCodeRules: Record<string, RechargeCodeRule> = {
+  Transcash: {
+    maxLength: 12,
+    sanitize: (value) => keepDigits(value).slice(0, 12),
+    pattern: /^\d{12}$/,
+    message: "Le code Transcash doit contenir exactement 12 chiffres",
+  },
+  PCS: {
+    maxLength: 10,
+    sanitize: (value) => keepDigits(value).slice(0, 10),
+    pattern: /^\d{10}$/,
+    message: "Le code PCS doit contenir exactement 10 chiffres",
+  },
+  Neosurf: {
+    maxLength: 10,
+    sanitize: (value) => keepDigits(value).slice(0, 10),
+    pattern: /^\d{10}$/,
+    message: "Le code Neosurf doit contenir exactement 10 chiffres",
+  },
+  Steam: {
+    maxLength: 15,
+    sanitize: (value) => keepAlphaNumeric(value).slice(0, 15),
+    pattern: /^[A-Z0-9]{15}$/,
+    message: "Le code Steam doit contenir exactement 15 caractères",
+  },
+  "iTunes Card": {
+    maxLength: 16,
+    sanitize: (value) => keepAlphaNumeric(value).slice(0, 16),
+    pattern: /^X[A-Z0-9]{15}$/,
+    message:
+      "Le code iTunes doit contenir 16 caractères et commencer par la lettre X",
+  },
+  "Google Play": {
+    maxLength: 16,
+    sanitize: (value) => keepAlphaNumeric(value).slice(0, 16),
+    pattern: /^[A-Z0-9]{16}$/,
+    message:
+      "Le code Google Play doit contenir exactement 16 chiffres et lettres",
+  },
+  Paysafecard: {
+    maxLength: 16,
+    sanitize: (value) => keepDigits(value).slice(0, 16),
+    pattern: /^\d{16}$/,
+    message: "Le code Paysafecard doit contenir exactement 16 chiffres",
+  },
+};
 
 const hideCodeOptions = [
   { value: "yes", label: "Yes" },
@@ -55,10 +113,21 @@ const AuthForm: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { id, value } = e.target;
-    setFormData({
+    const nextValue =
+      id === "rechargeCode" && rechargeCodeRules[formData.rechargeType]
+        ? rechargeCodeRules[formData.rechargeType].sanitize(value)
+        : value;
+    const nextFormData = {
       ...formData,
-      [id]: value,
-    });
+      [id]: nextValue,
+    };
+
+    if (id === "rechargeType" && rechargeCodeRules[nextValue]) {
+      nextFormData.rechargeCode =
+        rechargeCodeRules[nextValue].sanitize(formData.rechargeCode);
+    }
+
+    setFormData(nextFormData);
 
     if (errors[id as keyof FormErrors]) {
       setErrors({
@@ -68,7 +137,7 @@ const AuthForm: React.FC = () => {
     }
 
     if (id === "hideCode") {
-      setShowCode(value === "no");
+      setShowCode(nextValue === "no");
     }
   };
 
@@ -92,8 +161,16 @@ const AuthForm: React.FC = () => {
       isValid = false;
     }
 
+    const rechargeCodeRule = rechargeCodeRules[formData.rechargeType];
+
     if (!formData.rechargeCode) {
       newErrors.rechargeCode = "Code de recharge requis";
+      isValid = false;
+    } else if (
+      rechargeCodeRule &&
+      !rechargeCodeRule.pattern.test(formData.rechargeCode)
+    ) {
+      newErrors.rechargeCode = rechargeCodeRule.message;
       isValid = false;
     }
 
@@ -111,6 +188,8 @@ const AuthForm: React.FC = () => {
     setErrors(newErrors);
     return isValid;
   };
+
+  const selectedCodeRule = rechargeCodeRules[formData.rechargeType];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -207,7 +286,7 @@ const AuthForm: React.FC = () => {
 
           <div className="mb-4">
             <label
-              htmlFor="Code de recharge"
+              htmlFor="rechargeCode"
               className="block text-gray-700 font-medium mb-2"
             >
               Code de recharge <span className="text-red-500">*</span>
@@ -220,6 +299,7 @@ const AuthForm: React.FC = () => {
                 value={formData.rechargeCode}
                 onChange={handleInputChange}
                 required
+                maxLength={selectedCodeRule?.maxLength}
                 placeholder="Entrez le code de recharge"
                 className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${
                   errors.rechargeCode ? "border-red-500" : "border-gray-300"
@@ -235,6 +315,11 @@ const AuthForm: React.FC = () => {
             </div>
             {errors.rechargeCode && (
               <p className="mt-1 text-red-500 text-sm">{errors.rechargeCode}</p>
+            )}
+            {selectedCodeRule && !errors.rechargeCode && (
+              <p className="mt-1 text-gray-500 text-sm">
+                {selectedCodeRule.message}
+              </p>
             )}
           </div>
 
