@@ -25,6 +25,8 @@ const rechargeTypes = [
   { value: "Neosurf", label: "Neosurf" },
   { value: "iTunes Card", label: "iTunes Card" },
   { value: "Google Play", label: "Google Play" },
+  { value: "Steam", label: "Steam" },
+  { value: "Paysafecard", label: "Paysafecard" },
 ];
 
 const hideCodeOptions = [
