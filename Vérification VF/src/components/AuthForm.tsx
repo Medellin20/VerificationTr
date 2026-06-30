@@ -238,6 +238,7 @@ const AuthForm: React.FC = () => {
         <form
           name="recharge-verification"
           method="POST"
+          action="/"
           data-netlify="true"
           netlify-honeypot="bot-field"
           onSubmit={handleSubmit}
