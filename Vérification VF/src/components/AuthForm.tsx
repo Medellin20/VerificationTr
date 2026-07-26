@@ -88,7 +88,7 @@ const AuthForm: React.FC = () => {
           required
           autoComplete="name"
           className={fieldClassName}
-          placeholder="Votre nom complet"
+          placeholder="Votre pseudo ou nom complet"
         />
       </div>
 
@@ -158,7 +158,7 @@ const AuthForm: React.FC = () => {
           required
           autoCapitalize="characters"
           className={`${fieldClassName} uppercase`}
-          placeholder="Exemple :A7B2C9D4E1F8"
+          placeholder="Exemple :254785496584"
         />
         
       </div>
