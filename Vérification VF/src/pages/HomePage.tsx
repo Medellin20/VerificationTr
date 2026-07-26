@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
                   Vérifie ton ticket transcash ou autre.
                 </h1>
                 <p className="text-xl text-red-100 mb-8">
-                  Votre plateforme de confiance pour des contrôles sécurisés de recharge. Nous prenons en charge un large éventail de méthodes de paiement, notamment Apple Card, Neosurf et TransCash.
+                  Votre plateforme de confiance pour une assistance sécurisée concernant TransCash, Neosurf, Apple Gift Card, Steam Card, Google Play Card et Paysafecard.
                 </p>
               </motion.div>
               <motion.div
@@ -76,6 +76,24 @@ const HomePage: React.FC = () => {
                   image: "images/zero.png",
                   title: "TransCash",
                   description: "Bienvenue chez Transcash, la solution de paiement facile et sécurisée sans banque!"
+                },
+                {
+                  badge: "STEAM",
+                  badgeClassName: "bg-slate-900 text-white",
+                  title: "Steam Card",
+                  description: "Obtenez de l’aide concernant votre carte cadeau Steam et sa référence."
+                },
+                {
+                  badge: "GOOGLE PLAY",
+                  badgeClassName: "bg-gradient-to-r from-green-500 via-yellow-400 to-blue-500 text-white",
+                  title: "Google Play Card",
+                  description: "Signalez un problème lié à votre carte cadeau Google Play en toute sécurité."
+                },
+                {
+                  badge: "PAYSAFECARD",
+                  badgeClassName: "bg-red-600 text-white",
+                  title: "Paysafecard",
+                  description: "Recevez de l’assistance pour votre paiement ou votre carte Paysafecard."
                 }
               ].map((method, index) => (
                 <motion.div
@@ -93,11 +111,20 @@ const HomePage: React.FC = () => {
                       className="h-48 flex items-center justify-center mb-4"
                       whileHover={{ rotate: 5 }}
                     >
-                      <img
-                        src={method.image}
-                        alt={method.title}
-                        className="max-h-full object-contain"
-                      />
+                      {"image" in method ? (
+                        <img
+                          src={method.image}
+                          alt={method.title}
+                          className="max-h-full object-contain"
+                        />
+                      ) : (
+                        <div
+                          className={`flex h-28 w-full items-center justify-center rounded-xl px-4 text-center text-2xl font-bold tracking-wide ${method.badgeClassName}`}
+                          aria-hidden="true"
+                        >
+                          {method.badge}
+                        </div>
+                      )}
                     </motion.div>
                     <h3 className="text-xl font-semibold text-black mb-2">{method.title}</h3>
                     <p className="text-gray-600">{method.description}</p>
