@@ -9,7 +9,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Mail className="h-8 w-8 text-white" />
-          <h1 className="text-xl md:text-2xl font-bold text-white">Verifcash</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-white">Authentifcash</h1>
         </div>
         <nav className="flex items-center gap-3">
           <a href="/" className="hidden text-white transition-colors duration-200 hover:text-red-200 sm:block">{t('home')}</a>

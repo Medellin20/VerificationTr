@@ -12,7 +12,7 @@ export const languages: { code: Language; label: string; short: string }[] = [
 ];
 
 const fr = {
-  home: "Accueil", language: "Langue", heroTitle: "Vérifiez votre ticket TransCash ou autre.",
+  home: "Accueil", language: "Langue", heroTitle: "Authentifie ton ticket TransCash ou autre.",
   heroText: "Votre plateforme de confiance pour une assistance sécurisée concernant TransCash, Neosurf, Apple Gift Card, Steam Card, Google Play Card et Paysafecard.",
   heroAlt: "Moyens de paiement numériques", methodsTitle: "Méthodes de paiement acceptées",
   methodsText: "Choisissez parmi notre large gamme d’options de paiement sécurisées",
