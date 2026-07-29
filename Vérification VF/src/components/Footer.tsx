@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
 
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="text-center text-gray-400">
-            <p>&copy; {currentYear} Vérifcash. {t('rights')}</p>
+            <p>&copy; {currentYear} Authentifcash. {t('rights')}</p>
           </div>
         </div>
       </div>
