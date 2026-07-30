@@ -14,9 +14,9 @@ const Header: React.FC = () => {
         <nav className="flex items-center gap-3">
           <a href="/" className="hidden text-white transition-colors duration-200 hover:text-red-200 sm:block">{t('home')}</a>
           <div className="relative flex items-center">
-            <Languages className="pointer-events-none absolute left-3 h-4 w-4 text-red-800" aria-hidden="true" />
+            <Languages className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-white/70" aria-hidden="true" />
             <label htmlFor="language-selector" className="sr-only">{t('language')}</label>
-            <select id="language-selector" value={language} onChange={(event) => setLanguage(event.target.value as Language)} className="cursor-pointer rounded-lg border-0 bg-white py-2 pl-9 pr-8 text-sm font-semibold text-red-900 shadow-sm outline-none ring-red-200 focus:ring-2" aria-label={t('language')}>
+            <select id="language-selector" value={language} onChange={(event) => setLanguage(event.target.value as Language)} className="cursor-pointer rounded-md border border-white/20 bg-white/10 py-1.5 pl-8 pr-7 text-xs font-medium text-white outline-none transition-colors hover:bg-white/15 focus:ring-2 focus:ring-white/40 [&>option]:text-gray-900" aria-label={t('language')}>
               {languages.map(({ code, label, short }) => <option key={code} value={code}>{short} — {label}</option>)}
             </select>
           </div>
