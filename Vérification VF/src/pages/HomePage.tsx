@@ -16,23 +16,23 @@ const HomePage: React.FC = () => {
     { image: "images/zeze.png", title: "Paysafecard", description: t('paysafeDesc') }
   ];
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-white">
       <Header />
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-r from-red-700 to-red-900 text-white py-24">
+        <div className="relative bg-gradient-to-r from-red-700 to-red-900 py-12 text-white sm:py-16 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                <h1 className="mb-4 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:mb-6">
                   {t('heroTitle')}
                 </h1>
-                <p className="text-xl text-red-100 mb-8">
+                <p className="text-base leading-relaxed text-red-100 sm:text-lg md:text-xl">
                   {t('heroText')}
                 </p>
               </motion.div>
@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
                 <img
                   src="https://s3.eu-central-1.amazonaws.com/strapi.dundle.com/ou_et_comment_acheter_carte_neosurf_en_ligne_image_dundle_169bb11d25.png"
                   alt={t('heroAlt')}
-                  className="rounded-lg shadow-xl max-w-md w-full object-cover"
+                  className="w-full max-w-md rounded-lg object-cover shadow-xl lg:max-w-none"
                 />
               </motion.div>
             </div>
@@ -53,24 +53,24 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Payment Methods Section */}
-        <div className="py-16 bg-black">
+        <div className="bg-black py-12 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              className="text-center mb-12"
+              className="mb-8 text-center sm:mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">
                 {t('methodsTitle')}
               </h2>
-              <p className="mt-4 text-lg text-gray-400">
+              <p className="mt-3 text-base text-gray-400 sm:mt-4 sm:text-lg">
                 {t('methodsText')}
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
               {methods.map((method, index) => (
                 <motion.div
                   key={method.title}
@@ -82,9 +82,9 @@ const HomePage: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="p-6">
+                  <div className="p-4 sm:p-6">
                     <motion.div
-                      className="h-48 flex items-center justify-center mb-4"
+                      className="mb-4 flex h-40 items-center justify-center sm:h-44 lg:h-48"
                       whileHover={{ rotate: 5 }}
                     >
                         <img
@@ -103,25 +103,25 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Form Section */}
-        <div className="max-w-7xl mx-auto px-4 py-12 bg-white">
+        <div className="mx-auto max-w-7xl bg-white px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
           <motion.div
-            className="text-center mb-12"
+            className="mb-8 text-center sm:mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+            <h2 className="mb-3 text-2xl font-bold text-black sm:text-3xl md:text-4xl">
               {t('formSectionTitle')}
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="mx-auto max-w-3xl text-base text-gray-600 sm:text-lg">
               {t('formSectionText')}
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
             <motion.div
-              className="hidden md:block"
+              className="hidden lg:block"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}

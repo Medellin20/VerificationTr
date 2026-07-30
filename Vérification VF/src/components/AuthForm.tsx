@@ -101,7 +101,7 @@ const AuthForm: React.FC = () => {
       data-netlify="true"
       data-netlify-honeypot="bot-field"
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto rounded-xl border border-gray-200 bg-white p-6 shadow-lg md:p-8"
+      className="mx-auto w-full max-w-md rounded-xl border border-gray-200 bg-white p-4 shadow-lg sm:p-6 md:p-8"
     >
       <input type="hidden" name="form-name" value="recharge-support" />
 
@@ -113,7 +113,7 @@ const AuthForm: React.FC = () => {
       </p>
 
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">{t('requestTitle')}</h2>
+        <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">{t('requestTitle')}</h2>
         <p className="mt-2 text-sm text-gray-600">
           {t('requestIntro')}
         </p>

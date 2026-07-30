@@ -6,12 +6,12 @@ const Header: React.FC = () => {
   const { language, setLanguage, t } = useI18n();
   return (
     <header className="bg-gradient-to-r from-red-700 to-red-900 shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <Mail className="h-8 w-8 text-white" />
-          <h1 className="text-xl md:text-2xl font-bold text-white">Authentifcash</h1>
+      <div className="container mx-auto flex items-center justify-between gap-2 px-3 py-3 sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center gap-2">
+          <Mail className="h-6 w-6 shrink-0 text-white sm:h-8 sm:w-8" />
+          <h1 className="truncate text-base font-bold text-white sm:text-xl md:text-2xl">Authentifcash</h1>
         </div>
-        <nav className="flex items-center gap-3">
+        <nav className="flex shrink-0 items-center gap-3">
           <a href="/" className="hidden text-white transition-colors duration-200 hover:text-red-200 sm:block">{t('home')}</a>
           <div className="relative flex items-center">
             <Languages className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-white/70" aria-hidden="true" />

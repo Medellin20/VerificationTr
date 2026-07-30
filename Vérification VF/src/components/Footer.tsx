@@ -8,8 +8,8 @@ const Footer: React.FC = () => {
   
   return (
     <footer className="bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
           <div>
             <h3 className="text-2xl font-bold mb-4">Authentifcash</h3>
             <p className="text-gray-400 mb-4">
@@ -71,9 +71,9 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4">{t('contactInfo')}</h3>
             <ul className="space-y-4">
              
-              <li className="flex items-center space-x-3">
-                <Mail size={20} className="text-red-500" />
-                <span className="text-gray-400">support@authentifcash.com</span>
+              <li className="flex min-w-0 items-center gap-3">
+                <Mail size={20} className="shrink-0 text-red-500" />
+                <span className="min-w-0 break-all text-gray-400">support@authentifcash.com</span>
               </li>
             </ul>
           </div>
