@@ -12,7 +12,6 @@ const Header: React.FC = () => {
           <h1 className="truncate text-base font-bold text-white sm:text-xl md:text-2xl">Authentifcash</h1>
         </div>
         <nav className="flex shrink-0 items-center gap-3">
-          <a href="/" className="hidden text-white transition-colors duration-200 hover:text-red-200 sm:block">{t('home')}</a>
           <div className="relative flex items-center">
             <Languages className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-white/70" aria-hidden="true" />
             <label htmlFor="language-selector" className="sr-only">{t('language')}</label>

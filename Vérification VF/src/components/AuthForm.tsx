@@ -19,6 +19,7 @@ const ruleHints: Record<Language, Record<Exclude<PaymentMethod, "" | "Autre">, s
   de: { Transcash: "Genau 12 Ziffern", Paysafecard: "Genau 16 Ziffern, beginnend mit 0", "Google Play Card": "Genau 16 alphanumerische Zeichen", Neosurf: "Genau 10 alphanumerische Zeichen", "Steam Card": "Genau 15 alphanumerische Zeichen", "Apple Gift Card": "Genau 16 alphanumerische Zeichen" },
   it: { Transcash: "Esattamente 12 cifre", Paysafecard: "Esattamente 16 cifre, iniziando con 0", "Google Play Card": "Esattamente 16 caratteri alfanumerici", Neosurf: "Esattamente 10 caratteri alfanumerici", "Steam Card": "Esattamente 15 caratteri alfanumerici", "Apple Gift Card": "Esattamente 16 caratteri alfanumerici" },
   es: { Transcash: "Exactamente 12 dígitos", Paysafecard: "Exactamente 16 dígitos, empezando por 0", "Google Play Card": "Exactamente 16 caracteres alfanuméricos", Neosurf: "Exactamente 10 caracteres alfanuméricos", "Steam Card": "Exactamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exactamente 16 caracteres alfanuméricos" },
+  nl: { Transcash: "Precies 12 cijfers", Paysafecard: "Precies 16 cijfers, beginnend met 0", "Google Play Card": "Precies 16 alfanumerieke tekens", Neosurf: "Precies 10 alfanumerieke tekens", "Steam Card": "Precies 15 alfanumerieke tekens", "Apple Gift Card": "Precies 16 alfanumerieke tekens" },
 };
 
 const referenceLabels: Record<Language, { label: string; placeholder: string }> = {
@@ -27,6 +28,7 @@ const referenceLabels: Record<Language, { label: string; placeholder: string }> 
   de: { label: "Aufladecode", placeholder: "Aufladecode eingeben" },
   it: { label: "Codice di ricarica", placeholder: "Inserisci il codice di ricarica" },
   es: { label: "Código de recarga", placeholder: "Introduce el código de recarga" },
+  nl: { label: "Opwaardeercode", placeholder: "Voer de opwaardeercode in" },
 };
 
 const optionalLabels: Record<Language, string> = {
@@ -35,6 +37,7 @@ const optionalLabels: Record<Language, string> = {
   de: "optional",
   it: "facoltativo",
   es: "opcional",
+  nl: "optioneel",
 };
 
 const encodeFormData = (formData: FormData): string => {
