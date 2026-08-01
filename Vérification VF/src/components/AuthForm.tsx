@@ -168,7 +168,7 @@ const AuthForm: React.FC = () => {
           className={fieldClassName}
         >
           <option value="" disabled>{t('select')}</option>
-          <option value="TransCash">TransCash</option>
+          <option value="TransCash">Transcash</option>
           <option value="Neosurf">Neosurf</option>
           <option value="Apple Gift Card">Apple Gift Card</option>
           <option value="Steam Card">Steam Card</option>
