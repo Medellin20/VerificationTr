@@ -5,7 +5,10 @@ builder = "NIXPACKS"
 nixPkgs = ["nodejs", "npm"]
 
 [phases.install]
-cmds = ["cd server && npm install"]
+cmds = ["npm install", "cd server && npm install"]
+
+[phases.build]
+cmds = ["npm run build"]
 
 [start]
 cmd = "cd server && npm start"

