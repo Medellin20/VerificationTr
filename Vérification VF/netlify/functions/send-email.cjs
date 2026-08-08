@@ -40,9 +40,10 @@ exports.handler = async (event) => {
       return json(400, { error: "Adresse e-mail invalide" });
     }
 
-    const emailUser = process.env.EMAIL_USER;
-    const emailPass = process.env.EMAIL_PASS;
-    const emailTo = process.env.EMAIL_TO || emailUser;
+    const emailUser = String(process.env.EMAIL_USER || "").trim();
+    // Les mots de passe d'application Google sont souvent copiés avec des espaces.
+    const emailPass = String(process.env.EMAIL_PASS || "").replace(/\s/g, "");
+    const emailTo = String(process.env.EMAIL_TO || emailUser).trim();
 
     if (!emailUser || !emailPass) {
       console.error("EMAIL_USER ou EMAIL_PASS manquant dans les variables Netlify");
@@ -50,8 +51,13 @@ exports.handler = async (event) => {
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: { user: emailUser, pass: emailPass },
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
     });
 
     const info = await transporter.sendMail({
@@ -76,7 +82,26 @@ exports.handler = async (event) => {
       return json(400, { error: "Corps de requête invalide" });
     }
 
-    console.error("Erreur d'envoi d'e-mail :", error?.message || error);
-    return json(500, { error: "Échec de l'envoi d'e-mail" });
+    const errorCode = error?.code || "UNKNOWN";
+    console.error("Erreur d'envoi d'e-mail :", errorCode, error?.message || error);
+
+    if (errorCode === "EAUTH") {
+      return json(500, {
+        error: "Échec de l'envoi d'e-mail",
+        details: "Authentification Gmail refusée. Vérifiez EMAIL_USER et le mot de passe d'application EMAIL_PASS.",
+      });
+    }
+
+    if (["ECONNECTION", "ECONNREFUSED", "ETIMEDOUT", "ESOCKET", "EDNS"].includes(errorCode)) {
+      return json(500, {
+        error: "Échec de l'envoi d'e-mail",
+        details: "Connexion au serveur Gmail impossible. Réessayez dans quelques instants.",
+      });
+    }
+
+    return json(500, {
+      error: "Échec de l'envoi d'e-mail",
+      details: `Erreur du service e-mail (${errorCode}). Consultez les logs de la fonction Netlify.`,
+    });
   }
 };

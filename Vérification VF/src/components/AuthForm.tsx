@@ -94,7 +94,9 @@ const AuthForm: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`La soumission a échoué avec le statut ${response.status}`);
+        const result = await response.json().catch(() => null);
+        const details = result?.details || result?.error;
+        throw new Error(details || `La soumission a échoué avec le statut ${response.status}`);
       }
 
       form.reset();
@@ -104,9 +106,7 @@ const AuthForm: React.FC = () => {
     } catch (error) {
       console.error("Erreur d'envoi du formulaire :", error);
       setStatus("error");
-      setErrorMessage(
-        t("error"),
-      );
+      setErrorMessage(error instanceof Error ? error.message : t("error"));
     }
   };
 

@@ -50,6 +50,16 @@ Le formulaire appelle l'API Express `/api/send-email`, qui envoie ensuite le mes
 
 En développement, Vite transmet automatiquement les requêtes `/api` au serveur local sur le port 4001.
 
+### Déploiement Netlify
+
+Le fichier `netlify.toml` construit le frontend et redirige `/api/send-email` vers la Function Netlify correspondante. Dans **Site configuration > Environment variables**, ajoutez :
+
+- `EMAIL_USER` : l'adresse Gmail utilisée pour l'envoi ;
+- `EMAIL_PASS` : un mot de passe d'application Google (16 caractères), jamais le mot de passe habituel ;
+- `EMAIL_TO` : l'adresse qui reçoit les soumissions (facultatif, `EMAIL_USER` par défaut).
+
+Ne configurez pas `VITE_API_URL` sur Netlify : le frontend et la Function utilisent le même domaine. Après toute modification des variables, lancez un nouveau déploiement afin qu'elles soient prises en compte.
+
 ## Technologies Used
 
 - React
