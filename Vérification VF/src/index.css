@@ -7,14 +7,14 @@
 @layer base {
   :root {
     font-family: 'DM Sans', sans-serif;
-    color: #17131d;
-    background: #faf8fc;
+    color: #35101a;
+    background: #fff8f7;
   }
 
   body {
     margin: 0;
     min-width: 320px;
-    background: #faf8fc;
+    background: #fff8f7;
   }
 
   h1, h2, h3, h4 {

@@ -17,17 +17,17 @@ const HomePage: React.FC = () => {
     { image: "images/zeze.png", title: "Paysafecard", description: t('paysafeDesc') }
   ];
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#faf8fc]">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#fff8f7]">
       <Header />
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <div className="relative isolate overflow-hidden bg-[#17131d] py-16 text-white sm:py-20 lg:py-28">
-          <div className="hero-glow absolute -left-32 -top-32 -z-10 h-96 w-96 rounded-full bg-[#e62e46]/40 blur-3xl" />
-          <div className="hero-glow absolute -bottom-48 right-0 -z-10 h-[30rem] w-[30rem] rounded-full bg-[#743b9e]/30 blur-3xl" />
+        <div className="relative isolate overflow-hidden bg-gradient-to-br from-[#4b0f1a] via-[#681524] to-[#18090e] py-12 text-white sm:py-14 lg:py-16">
+          <div className="hero-glow absolute -left-32 -top-32 -z-10 h-96 w-96 rounded-full bg-[#d94855]/30 blur-3xl" />
+          <div className="hero-glow absolute -bottom-48 right-0 -z-10 h-[30rem] w-[30rem] rounded-full bg-[#8f263c]/30 blur-3xl" />
           <div className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] [background-size:46px_46px]" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_.95fr] lg:gap-14">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[.18em] text-[#ffb2a9]">
                   <Sparkles className="h-3.5 w-3.5" /> Assistance de confiance
                 </div>
-                <h1 className="mb-5 max-w-2xl text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:mb-6">
+                <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:mb-5">
                   {t('heroTitle')}
                 </h1>
                 <p className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg md:text-xl">
@@ -49,11 +49,11 @@ const HomePage: React.FC = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="hero-card relative rounded-[2rem] border border-white/20 bg-white/10 p-3 shadow-2xl shadow-black/30 backdrop-blur-md">
+                <div className="hero-card relative w-full max-w-lg rounded-2xl border border-white/20 bg-white/10 p-2.5 shadow-2xl shadow-black/30 backdrop-blur-md">
                 <img
                   src="https://s3.eu-central-1.amazonaws.com/strapi.dundle.com/ou_et_comment_acheter_carte_neosurf_en_ligne_image_dundle_169bb11d25.png"
                   alt={t('heroAlt')}
-                  className="w-full max-w-md rounded-[1.4rem] object-cover shadow-xl lg:max-w-none"
+                  className="aspect-[16/9] w-full rounded-xl object-cover shadow-xl"
                 />
                 <div className="absolute -bottom-4 -left-4 flex items-center gap-2 rounded-2xl border border-white/20 bg-[#27202f]/90 px-4 py-3 text-xs font-semibold shadow-xl backdrop-blur">
                   <LockKeyhole className="h-4 w-4 text-[#ff8177]" /> Données protégées
@@ -65,10 +65,10 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Payment Methods Section */}
-        <div className="bg-[#211b29] py-16 sm:py-20">
+        <div className="bg-gradient-to-b from-[#3d0c17] to-[#260910] py-14 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              className="mb-8 text-center sm:mb-12"
+              className="mb-8 text-center sm:mb-10"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -82,11 +82,11 @@ const HomePage: React.FC = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7">
               {methods.map((method, index) => (
                 <motion.div
                   key={method.title}
-                  className="group shine rounded-3xl border border-white/10 bg-white p-5 shadow-xl shadow-black/10 transition-shadow duration-300 hover:shadow-2xl sm:p-6"
+                  className="group shine rounded-2xl border border-[#ead9d8] bg-[#fffdfc] p-4 shadow-lg shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:border-[#d9aeb1] hover:shadow-xl sm:p-5"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
@@ -94,22 +94,22 @@ const HomePage: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="p-4 sm:p-6">
+                  <div>
                     <motion.div
-                      className="mb-5 flex h-40 items-center justify-center rounded-2xl bg-gradient-to-br from-[#faf8fc] to-[#f1eaf4] sm:h-44 lg:h-48"
-                      whileHover={{ rotate: 5 }}
+                      className="mb-5 flex aspect-[16/9] items-center justify-center overflow-hidden rounded-xl border border-[#f1e3e1] bg-gradient-to-br from-[#fff8f7] to-[#f6e8e5] px-5"
+                      whileHover={{ scale: 1.02 }}
                     >
                         <img
                           src={method.image}
                           alt={method.title}
-                          className="max-h-full object-contain"
+                          className="h-full w-full object-contain"
                         />
                     </motion.div>
                     <div className="mb-2 flex items-center justify-between gap-2">
-                      <h3 className="text-xl font-bold text-[#211b29]">{method.title}</h3>
+                      <h3 className="text-lg font-bold tracking-tight text-[#35101a]">{method.title}</h3>
                       <ArrowRight className="h-5 w-5 text-[#e34b55] transition-transform group-hover:translate-x-1" />
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600">{method.description}</p>
+                    <p className="text-sm leading-relaxed text-[#6c5960]">{method.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -118,7 +118,7 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Form Section */}
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
           <motion.div
             className="mb-8 text-center sm:mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -126,7 +126,7 @@ const HomePage: React.FC = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-[#211b29] sm:text-4xl md:text-5xl">
+            <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-[#35101a] sm:text-4xl md:text-5xl">
               {t('formSectionTitle')}
             </h2>
             <p className="mx-auto max-w-3xl text-base text-gray-600 sm:text-lg">

@@ -5,7 +5,7 @@ import { languages, Language, useI18n } from '../i18n';
 const Header: React.FC = () => {
   const { language, setLanguage, t } = useI18n();
   return (
-    <header className="sticky top-0 z-30 border-b border-white/10 bg-[#17131d]/90 shadow-lg shadow-[#17131d]/10 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-[#3d0c17]/90 shadow-lg shadow-[#260910]/20 backdrop-blur-xl">
       <div className="container mx-auto flex items-center justify-between gap-2 px-4 py-3 sm:px-6 sm:py-4">
         <div className="flex min-w-0 items-center gap-2">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff6b5f] to-[#e62e46] shadow-lg shadow-red-900/30">

@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   const { t } = useI18n();
   
   return (
-    <footer className="bg-[#17131d] text-white">
+    <footer className="bg-[#260910] text-white">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
           <div>
