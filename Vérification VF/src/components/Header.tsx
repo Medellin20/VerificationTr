@@ -15,7 +15,7 @@ const Header: React.FC = () => {
         </div>
         <nav className="flex shrink-0 items-center gap-3">
           <span className="hidden items-center gap-1.5 text-xs font-medium text-white/60 sm:flex">
-            <ShieldCheck className="h-4 w-4 text-[#ff8177]" /> {t('secure') || 'Sécurisé'}
+            <ShieldCheck className="h-4 w-4 text-[#ff8177]" /> Sécurisé
           </span>
           <div className="relative flex items-center">
             <Languages className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-white/70" aria-hidden="true" />

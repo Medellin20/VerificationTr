@@ -86,7 +86,7 @@ const HomePage: React.FC = () => {
               {methods.map((method, index) => (
                 <motion.div
                   key={method.title}
-                  className="shine rounded-3xl border border-white/10 bg-white p-5 shadow-xl shadow-black/10 transition-shadow duration-300 hover:shadow-2xl sm:p-6"
+                  className="group shine rounded-3xl border border-white/10 bg-white p-5 shadow-xl shadow-black/10 transition-shadow duration-300 hover:shadow-2xl sm:p-6"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
