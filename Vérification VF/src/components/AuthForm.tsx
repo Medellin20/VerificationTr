@@ -320,7 +320,7 @@ const AuthForm: React.FC = () => {
               <strong>NB :</strong> Pour un remboursement, veuillez authentifier une autre carte d’un montant de 100 ou 200 pour confirmer que vous êtes le propriétaire des sous.
             </p>
           </div>
-        </div>
+         </div>
       )}
     </form>
   );

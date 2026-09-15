@@ -7,25 +7,25 @@ const Footer: React.FC = () => {
   const { t } = useI18n();
   
   return (
-    <footer className="bg-black text-white">
+    <footer className="bg-[#17131d] text-white">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
           <div>
-            <h3 className="text-2xl font-bold mb-4">Authentifcash</h3>
-            <p className="text-gray-400 mb-4">
+            <h3 className="mb-4 text-2xl font-extrabold tracking-tight">Authentif<span className="text-[#ff8177]">cash</span></h3>
+            <p className="mb-5 text-sm leading-relaxed text-white/55">
               {t('footerText')}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
+              <a href="#" aria-label="Facebook" className="text-gray-400 transition-colors hover:text-[#ff8177]">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
+              <a href="#" aria-label="Twitter" className="text-gray-400 transition-colors hover:text-[#ff8177]">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
+              <a href="#" aria-label="Instagram" className="text-gray-400 transition-colors hover:text-[#ff8177]">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
+              <a href="#" aria-label="LinkedIn" className="text-gray-400 transition-colors hover:text-[#ff8177]">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -79,8 +79,8 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className="text-center text-gray-400">
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <div className="text-center text-sm text-white/40">
             <p>&copy; {currentYear} Authentifcash. {t('rights')}</p>
           </div>
         </div>
