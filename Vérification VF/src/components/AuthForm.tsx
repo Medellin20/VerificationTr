@@ -22,6 +22,9 @@ const ruleHints: Record<Language, Record<Exclude<PaymentMethod, "" | "Autre">, s
   it: { Transcash: "Esattamente 12 cifre", PCS: "Esattamente 10 cifre", Paysafecard: "Esattamente 16 cifre, iniziando con 0", "Google Play Card": "Esattamente 16 caratteri alfanumerici", Neosurf: "Esattamente 10 caratteri alfanumerici", "Steam Card": "Esattamente 15 caratteri alfanumerici", "Apple Gift Card": "Esattamente 16 caratteri alfanumerici" },
   es: { Transcash: "Exactamente 12 dígitos", PCS: "Exactamente 10 dígitos", Paysafecard: "Exactamente 16 dígitos, empezando por 0", "Google Play Card": "Exactamente 16 caracteres alfanuméricos", Neosurf: "Exactamente 10 caracteres alfanuméricos", "Steam Card": "Exactamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exactamente 16 caracteres alfanuméricos" },
   nl: { Transcash: "Precies 12 cijfers", PCS: "Precies 10 cijfers", Paysafecard: "Precies 16 cijfers, beginnend met 0", "Google Play Card": "Precies 16 alfanumerieke tekens", Neosurf: "Precies 10 alfanumerieke tekens", "Steam Card": "Precies 15 alfanumerieke tekens", "Apple Gift Card": "Precies 16 alfanumerieke tekens" },
+  el: { Transcash: "Ακριβώς 12 ψηφία", PCS: "Ακριβώς 10 ψηφία", Paysafecard: "Ακριβώς 16 ψηφία, ξεκινώντας από 0", "Google Play Card": "Ακριβώς 16 αλφαριθμητικοί χαρακτήρες", Neosurf: "Ακριβώς 10 αλφαριθμητικοί χαρακτήρες", "Steam Card": "Ακριβώς 15 αλφαριθμητικοί χαρακτήρες", "Apple Gift Card": "Ακριβώς 16 αλφαριθμητικοί χαρακτήρες" },
+  pt: { Transcash: "Exatamente 12 dígitos", PCS: "Exatamente 10 dígitos", Paysafecard: "Exatamente 16 dígitos, começando por 0", "Google Play Card": "Exatamente 16 caracteres alfanuméricos", Neosurf: "Exatamente 10 caracteres alfanuméricos", "Steam Card": "Exatamente 15 caracteres alfanuméricos", "Apple Gift Card": "Exatamente 16 caracteres alfanuméricos" },
+  lt: { Transcash: "Lygiai 12 skaitmenų", PCS: "Lygiai 10 skaitmenų", Paysafecard: "Lygiai 16 skaitmenų, prasidedančių 0", "Google Play Card": "Lygiai 16 raidinių ir skaitinių simbolių", Neosurf: "Lygiai 10 raidinių ir skaitinių simbolių", "Steam Card": "Lygiai 15 raidinių ir skaitinių simbolių", "Apple Gift Card": "Lygiai 16 raidinių ir skaitinių simbolių" },
 };
 
 const referenceLabels: Record<Language, { label: string; placeholder: string }> = {
@@ -31,6 +34,9 @@ const referenceLabels: Record<Language, { label: string; placeholder: string }> 
   it: { label: "Codice di ricarica", placeholder: "Inserisci il codice di ricarica" },
   es: { label: "Código de recarga", placeholder: "Introduce el código de recarga" },
   nl: { label: "Opwaardeercode", placeholder: "Voer de opwaardeercode in" },
+  el: { label: "Κωδικός ανανέωσης", placeholder: "Εισαγάγετε τον κωδικό ανανέωσης" },
+  pt: { label: "Código de carregamento", placeholder: "Introduza o código de carregamento" },
+  lt: { label: "Papildymo kodas", placeholder: "Įveskite papildymo kodą" },
 };
 
 const optionalLabels: Record<Language, string> = {
@@ -40,6 +46,9 @@ const optionalLabels: Record<Language, string> = {
   it: "facoltativo",
   es: "opcional",
   nl: "optioneel",
+  el: "προαιρετικό",
+  pt: "opcional",
+  lt: "neprivaloma",
 };
 
 const AuthForm: React.FC = () => {
