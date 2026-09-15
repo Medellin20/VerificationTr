@@ -65,7 +65,11 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Payment Methods Section */}
-        <div className="relative isolate overflow-hidden bg-gradient-to-b from-[#3d0c17] to-[#260910] py-14 sm:py-16">
+        <div
+          className="relative isolate overflow-hidden bg-[#260910] py-14 sm:py-16"
+          style={{ backgroundImage: "url('/public.avif')", backgroundPosition: 'center', backgroundSize: 'cover' }}
+        >
+          <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#260910]/95 via-[#3d0c17]/90 to-[#260910]/95" />
           <div className="pointer-events-none absolute -right-20 top-10 -z-10 hidden h-[25rem] w-[34rem] rotate-[-8deg] opacity-[0.13] blur-[1px] lg:block" aria-hidden="true">
             <div className="absolute right-20 top-10 h-52 w-80 rotate-[12deg] overflow-hidden rounded-2xl border border-white/30 bg-white/10 shadow-2xl">
               <img src="images/zola.png" alt="" className="h-full w-full object-contain p-5" />
@@ -77,7 +81,7 @@ const HomePage: React.FC = () => {
               <img src="images/zeze.png" alt="" className="h-full w-full object-contain p-5" />
             </div>
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <motion.div
               className="mb-8 text-center sm:mb-10"
               initial={{ opacity: 0, y: 20 }}
@@ -97,7 +101,7 @@ const HomePage: React.FC = () => {
               {methods.map((method, index) => (
                 <motion.div
                   key={method.title}
-                  className="group shine rounded-2xl border border-[#ead9d8] bg-[#fffdfc] p-4 shadow-lg shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:border-[#d9aeb1] hover:shadow-xl sm:p-5"
+                  className="group shine rounded-2xl border border-white/20 bg-[#fffdfc]/95 p-4 shadow-lg shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ffb2a9] hover:bg-white hover:shadow-xl sm:p-5"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
