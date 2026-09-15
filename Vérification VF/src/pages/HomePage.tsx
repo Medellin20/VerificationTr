@@ -22,11 +22,14 @@ const HomePage: React.FC = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <div className="relative isolate overflow-hidden bg-gradient-to-br from-[#4b0f1a] via-[#681524] to-[#18090e] py-12 text-white sm:py-14 lg:py-16">
+        <div
+          className="relative isolate overflow-hidden bg-[#260910] py-12 text-white sm:py-14 lg:py-16"
+          style={{ backgroundImage: "url('/public.avif')", backgroundPosition: 'center', backgroundSize: 'cover' }}
+        >
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#4b0f1a]/90 via-[#681524]/85 to-[#18090e]/95" />
           <div className="hero-glow absolute -left-32 -top-32 -z-10 h-96 w-96 rounded-full bg-[#d94855]/30 blur-3xl" />
           <div className="hero-glow absolute -bottom-48 right-0 -z-10 h-[30rem] w-[30rem] rounded-full bg-[#8f263c]/30 blur-3xl" />
-          <div className="absolute inset-0 -z-10 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] [background-size:46px_46px]" />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_.95fr] lg:gap-14">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
