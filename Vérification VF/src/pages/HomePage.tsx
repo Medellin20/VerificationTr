@@ -65,7 +65,18 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Payment Methods Section */}
-        <div className="bg-gradient-to-b from-[#3d0c17] to-[#260910] py-14 sm:py-16">
+        <div className="relative isolate overflow-hidden bg-gradient-to-b from-[#3d0c17] to-[#260910] py-14 sm:py-16">
+          <div className="pointer-events-none absolute -right-20 top-10 -z-10 hidden h-[25rem] w-[34rem] rotate-[-8deg] opacity-[0.13] blur-[1px] lg:block" aria-hidden="true">
+            <div className="absolute right-20 top-10 h-52 w-80 rotate-[12deg] overflow-hidden rounded-2xl border border-white/30 bg-white/10 shadow-2xl">
+              <img src="images/zola.png" alt="" className="h-full w-full object-contain p-5" />
+            </div>
+            <div className="absolute right-0 top-24 h-52 w-80 rotate-[-12deg] overflow-hidden rounded-2xl border border-white/30 bg-white/10 shadow-2xl">
+              <img src="images/zazi.png" alt="" className="h-full w-full object-contain p-5" />
+            </div>
+            <div className="absolute right-36 top-36 h-52 w-80 rotate-[3deg] overflow-hidden rounded-2xl border border-white/30 bg-white/10 shadow-2xl">
+              <img src="images/zeze.png" alt="" className="h-full w-full object-contain p-5" />
+            </div>
+          </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="mb-8 text-center sm:mb-10"
