@@ -17,6 +17,10 @@
     background: #fff8f7;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   h1, h2, h3, h4 {
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
@@ -32,6 +36,11 @@
   50% { opacity: .65; transform: scale(1.08); }
 }
 
+@keyframes voucher-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg) scale(1); }
+  50% { transform: translateY(-5px) rotate(1deg) scale(1.035); }
+}
+
 @layer components {
   .hero-glow {
     animation: pulse-soft 7s ease-in-out infinite;
@@ -41,12 +50,23 @@
     animation: float 6s ease-in-out infinite;
   }
 
+  .method-image {
+    animation: voucher-float 5s ease-in-out infinite;
+    transition: filter .3s ease;
+  }
+
+  .group:hover .method-image,
+  .group:focus-visible .method-image {
+    filter: saturate(1.15) drop-shadow(0 8px 10px rgb(53 16 26 / .18));
+  }
+
   .shine {
     position: relative;
     overflow: hidden;
   }
 
   .shine::after {
+    pointer-events: none;
     position: absolute;
     inset: 0;
     content: '';

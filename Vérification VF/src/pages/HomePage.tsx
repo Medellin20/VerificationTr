@@ -102,9 +102,11 @@ const HomePage: React.FC = () => {
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7">
               {methods.map((method, index) => (
-                <motion.div
+                <motion.a
                   key={method.title}
-                  className="group shine rounded-2xl border border-white/20 bg-[#fffdfc]/95 p-4 shadow-lg shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ffb2a9] hover:bg-white hover:shadow-xl sm:p-5"
+                  href="#support-form"
+                  aria-label={`${method.title} — ${t('requestTitle')}`}
+                  className="group shine block rounded-2xl border border-white/20 bg-[#fffdfc]/95 p-4 shadow-lg shadow-black/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ffb2a9] hover:bg-white hover:shadow-xl focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#ff8177] sm:p-5"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
@@ -120,7 +122,8 @@ const HomePage: React.FC = () => {
                         <img
                           src={method.image}
                           alt={method.title}
-                          className="h-full w-full object-contain"
+                          className="method-image h-full w-full object-contain"
+                          style={{ animationDelay: `${index * -0.7}s` }}
                         />
                     </motion.div>
                     <div className="mb-2 flex items-center justify-between gap-2">
@@ -129,7 +132,7 @@ const HomePage: React.FC = () => {
                     </div>
                     <p className="text-sm leading-relaxed text-[#6c5960]">{method.description}</p>
                   </div>
-                </motion.div>
+                </motion.a>
               ))}
             </div>
           </div>
@@ -191,6 +194,9 @@ const HomePage: React.FC = () => {
             </motion.div>
             
             <motion.div
+              id="support-form"
+              tabIndex={-1}
+              className="scroll-mt-24"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
